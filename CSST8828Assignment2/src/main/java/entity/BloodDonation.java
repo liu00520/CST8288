@@ -168,4 +168,5 @@ public class BloodDonation implements Serializable {
         return "entity.BloodDonation[ donationId=" + donationId + " ]";
     }
 
+  
 }
