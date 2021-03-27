@@ -22,7 +22,6 @@ public class PersonTableView extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -48,6 +47,8 @@ public class PersonTableView extends HttpServlet {
             
             logic.getAll().forEach(e -> out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
                     + "<td>%s</td><tr>", logic.extractDataAsList(e).toArray()));
+            
+            logic.getColumnNames().forEach(e -> out.printf("<th>%s</th>", e));
             out.print("</tr>");
             out.println("</body>");
             out.println("</html>");
@@ -88,7 +89,7 @@ public class PersonTableView extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Person Table View";
+    }
 
 }
