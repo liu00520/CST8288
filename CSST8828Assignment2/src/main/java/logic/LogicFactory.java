@@ -14,8 +14,7 @@ public abstract class LogicFactory {
     public static < T> T getFor(String entityName) {
 
         try {
-            Class<T> type = (Class<T>) Class.forName(PACKAGE + entityName + SUFFIX);
-            return getFor(type);
+            return getFor((Class<T>) Class.forName(PACKAGE + entityName + SUFFIX));
             
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException("bad entity =" + entityName, e);
