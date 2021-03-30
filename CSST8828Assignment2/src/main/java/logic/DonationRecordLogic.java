@@ -1,16 +1,17 @@
 package logic;
 
+import static com.mysql.cj.MysqlType.DATETIME;
 import common.ValidationException;
 import dal.DonationRecordDAL;
-import entity.BloodDonation;
 import entity.DonationRecord;
-import entity.Person;
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
+
 import java.util.Arrays;
 import java.util.Date;
-
 import java.util.List;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.ObjIntConsumer;
@@ -29,25 +30,24 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
     public static final String TESTED = "tested";
     public static final String DONATION_ID = "donation_id";
     public static final String PERSON_ID = "person_id";
-    public static final String RECORD_ID = "recordId";
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat( "yyyy-MM-dd kk:mm:ss" );
+    public static final String ID = "id";
       
-    int b;
-       Person p2= new Person(b);
-       
-    
-    public DonationRecordLogic(DonationRecordDAL dal) {
-        super(dal);
+    //can i create object of other entities here instead? 
+    //so i can use it when use it to set on DonationRecord entity in craete entity
+  
+    DonationRecordLogic() {
+        super(new DonationRecordDAL());
     }
+
     
-        @Override
+    @Override
     public List<DonationRecord> getAll() {
           return get( () -> dal().findAll() );
     }
 
     @Override
-    public DonationRecord getWithId(int recordId) {
-               return get( () -> dal().findById( recordId ) );    
+    public DonationRecord getWithId(int id) {
+               return get( () -> dal().findById( id ) );    
     
 }
 
@@ -55,20 +55,20 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         return get( () -> dal().findByTested(tested) );
     }
     
-    public List<DonationRecord> getDonationRecordWithHospital(String hospital ) {
-        return get( () -> dal().findByHospital(hospital));
+    public List<DonationRecord> getDonationRecordWithHospital(String username ) {
+        return get( () -> dal().findByHospital(username));
     }
       
     public List<DonationRecord> getDonationRecordWithAdminstrator(String administrator) {
        return get( () -> dal().findByAdministrator(administrator));
     }
     
-    public List<DonationRecord> findByPerson(Person person_id) {
-           return get( () -> dal().findByPerson(person_id));
+    public List<DonationRecord> findByPerson(int personId) {
+           return get( () -> dal().findByPerson(personId));
        }
     
-    public List<DonationRecord> findByDonation(BloodDonation donation_id) {
-           return get( () -> dal().findByDonation(donation_id));
+    public List<DonationRecord> findByDonation(int donationId) {
+           return get( () -> dal().findByDonation(donationId));
        }
     
        public List<DonationRecord> findByCreated(Date created) {
@@ -93,9 +93,9 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         //ID is generated, so if it exists add it to the entity object
         //otherwise it does not matter as mysql will create an if for it.
         //the only time that we will have id is for update behaviour.
-        if( parameterMap.containsKey( RECORD_ID ) ){
+        if( parameterMap.containsKey( ID ) ){
             try {
-                donationRecordEntity.setId( Integer.parseInt( parameterMap.get( RECORD_ID )[ 0 ] ) );
+                donationRecordEntity.setId( Integer.parseInt( parameterMap.get( ID )[ 0 ] ) );
             } catch( java.lang.NumberFormatException ex ) {
                 throw new ValidationException( ex );
             }
@@ -121,85 +121,37 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         //everything in the parameterMap is string so it must first be
         //converted to appropriate type. have in mind that values are
         //stored in an array of String; almost always the value is at
-        //index zero unless you have used duplicated key/name somewhere.
-        String displayPersonId = null;
-        if( parameterMap.containsKey( PERSON_ID )){
-           try{
-            
-            donationRecordEntity.setId( Integer.parseInt( parameterMap.get( PERSON_ID )[ 0 ] ));
-
-            } catch( java.lang.NumberFormatException ex ) {
-                throw new ValidationException( ex );
-            }
-        }
-        
-         if( parameterMap.containsKey( DONATION_ID )){
-           try{
-            
-             String bD1= parameterMap.get( DONATION_ID )[ 0 ];
-              
-             int bd1= Integer.parseInt(bD1);
-           
-             // is that how i should deal with settingBloodDonation?
-             BloodDonation bd= new BloodDonation(bd1);
-            
-            donationRecordEntity.setBloodDonation(bd);
-
-            } catch( java.lang.NumberFormatException ex ) {
-                throw new ValidationException( ex );
-            }
-        }
+        //index zero unless you have used duplicated key/name somewhere
+        //extract the date from map .
          
-         
-         if( parameterMap.containsKey( PERSON_ID )){
-           try{
-            
-             String bD1= parameterMap.get( PERSON_ID )[ 0 ];
-              
-             //is that a more proper way to do it?
-              b = Integer.parseInt(bD1);
        
-             
-          
-            donationRecordEntity.setPerson(p2);
-
-            } catch( java.lang.NumberFormatException ex ) {
-                throw new ValidationException( ex );
-            }
-        }
+        String dd= parameterMap.get(CREATED)[0].replace("T", " ");
         
-          //extract the date from map first.
+ 
+        Date date = this.convertStringToDate(dd);
+     
         
-        String d= parameterMap.get(CREATED)[0];
      
         String hospital = parameterMap.get( HOSPITAL )[ 0 ];
         String administrator = parameterMap.get( ADMINSTRATOR )[ 0 ];
-        //need to convert map 
         String tested = parameterMap.get(TESTED)[ 0 ];
-        //need to convert
-        
-           String bd = parameterMap.get(DONATION_ID)[ 0 ];
-              int o= Integer.parseInt(bd);
+       
        // convert string to boolean
         boolean testBoolean=Boolean.parseBoolean(tested);  
         
-      //convert to date 
-
-        donationRecordEntity.setCreated(convertStringToDate(d));
-        //validate the data
+        //Validated strings
         validator.accept( hospital, 100 );
         validator.accept( administrator, 100 );
+      
         
-        
-     //   validator.accept( tested), 45 );
-  
-     
+            
 
         //set values on entity
-       donationRecordEntity.setTested( testBoolean);
-       donationRecordEntity.setHospital( hospital );
-       donationRecordEntity.setAdministrator( administrator );
-       
+       donationRecordEntity.setTested(testBoolean);
+       donationRecordEntity.setHospital(hospital );
+       donationRecordEntity.setAdministrator(administrator );
+       donationRecordEntity.setCreated(date);
+
 
         return donationRecordEntity;
     }
@@ -207,31 +159,20 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
        
     @Override
     public List<String> getColumnNames() {
-        return Arrays.asList( "RecordId", "Personn_id", "Donation_id", "Tested", "Adminstrator", "Hospital", "Created" );
+        return Arrays.asList( "RecordId", "Person_id", "Donation_id", "Tested", "Adminstrator", "Hospital", "Created" );
     }
 
     @Override
     public List<String> getColumnCodes() {
-        return Arrays.asList( RECORD_ID, PERSON_ID, DONATION_ID, TESTED, ADMINSTRATOR, HOSPITAL, CREATED );
+        return Arrays.asList( ID, PERSON_ID, DONATION_ID, TESTED, ADMINSTRATOR, HOSPITAL, CREATED );
     }
 
+    
     @Override
     public List<?> extractDataAsList(DonationRecord e) {
         return Arrays.asList( e.getId(), e.getPerson(), e.getBloodDonation(), e.getTested(), e.getAdministrator(), 
                 e.getHospital(), e.getCreated() );
-    }
-
-   
-      
-    @Override
-     public Date convertStringToDate( String date ) {
-        try {
-            return FORMATTER.parse( date );
-        } catch( ParseException ex ) {
-            Logger.getLogger( GenericLogic.class.getName() ).log( Level.SEVERE, null, ex );
-            throw new ValidationException( "failed to format String=\"" + date + "\" to a date object", ex );
-        }
-    }
+    
      
-      
+    }
 }

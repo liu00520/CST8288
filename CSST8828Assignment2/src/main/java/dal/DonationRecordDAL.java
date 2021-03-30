@@ -25,9 +25,9 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     }
 
     @Override
-    public DonationRecord findById(int id) {
+    public DonationRecord findById(int recordId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
+        map.put("id", recordId);
 
         return findResult("DonationRecord.findByRecordId", map);
     }
@@ -51,29 +51,29 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
 
     }
 
-    public List<DonationRecord> findByHospital(String hospital) {
+    public List<DonationRecord> findByHospital(String username) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("hospital", hospital);
+        map.put("hospital", username);
 
         return findResults("DonationRecord.findByHospital", map);
 
     }
 
-    public List<DonationRecord> findByPerson(Person id) {
+    public List<DonationRecord> findByPerson(int personId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("person_id", id);
+        map.put("person_id", personId);
 
         return findResults("DonationRecord.findByPerson", map);
 
     }
     
        //find results for all methods except id because id is teh only unique one 
-    public List<DonationRecord> findByDonation(BloodDonation bloodDonation) {
+    public List<DonationRecord> findByDonation(int donationId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("donation_id", bloodDonation);
+        map.put("donation_id", donationId);
 
         return findResults("DonationRecord.findByDonation", map);
 
