@@ -71,7 +71,7 @@ public class PersonLogicTest {
         list = logic.getAll();
         assertEquals(originalSize-1, list.size());
     }
-
+    //same as above
     @Test
     final void testAllEdge() {
         List<Person> list = logic.getAll();
@@ -111,10 +111,10 @@ public class PersonLogicTest {
     
     @Test
     final void testGetPersonWithPhoneNormal() {
-
+        
     }
     @Test
-    final void testGetPersonWithPhoneInvalid() {
+    final void testGetPersonWithPhonee() {
         personExpected.setPhone("");
         assertNotNull(personExpected);
     }
