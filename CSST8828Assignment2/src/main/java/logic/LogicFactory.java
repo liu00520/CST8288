@@ -11,6 +11,7 @@ public abstract class LogicFactory {
     private LogicFactory() {
     }
 
+
     public static < T> T getFor(String entityName) {
 
         try {
@@ -25,11 +26,13 @@ public abstract class LogicFactory {
 
         try {
             Constructor<T> declaredConstructor = type.getDeclaredConstructor();
+
             return declaredConstructor.newInstance();
             
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException e) {
             throw new IllegalArgumentException("bad entity =" + type, e);
+
         }
     }
 }
