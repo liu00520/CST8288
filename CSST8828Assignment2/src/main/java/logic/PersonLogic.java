@@ -87,7 +87,7 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
             }
         };
         
-        Date birthDate = this.convertStringToDate(parameterMap.get(BIRTH)[0]);
+        Date birthDate = this.convertStringToDate(parameterMap.get(BIRTH)[0].replace("T", " "));
         String firstName = parameterMap.get(FIRST_NAME)[0];
         String lastName = parameterMap.get(LAST_NAME)[0];
         String phone = parameterMap.get(PHONE)[0];

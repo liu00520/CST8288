@@ -3,7 +3,6 @@ package logic;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-
 public abstract class LogicFactory {
 
     private static final String PACKAGE = "logic.";
@@ -12,29 +11,25 @@ public abstract class LogicFactory {
     private LogicFactory() {
     }
 
-    // I think the correct way is: return getFor(type). 
-    public static< T> T getFor( String entityName ) {
-       
+    public static < T> T getFor(String entityName) {
+
         try {
-        Class<T> type = (Class <T>) Class.forName(PACKAGE + entityName + SUFFIX);
-        T newInstance = getFor(type);
-        return newInstance;
+            return getFor((Class<T>) Class.forName(PACKAGE + entityName + SUFFIX));
+            
         } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("bad entity =" + entityName, e);
         }
-        return null; 
     }
-    
-    //again probably should just return declaredConstructor
+
     public static <T> T getFor(Class<T> type) {
-        
+
         try {
-        Constructor <T> declaredConstructor = type.getDeclaredConstructor();
-        T newInstance = declaredConstructor.newInstance();
-        return newInstance;
+            Constructor<T> declaredConstructor = type.getDeclaredConstructor();
+            return declaredConstructor.newInstance();
+            
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            throw new IllegalArgumentException("bad entity =" + type, e);
         }
-        catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | 
-                NoSuchMethodException | SecurityException e) {
-        }
-        return null;
     }
 }
