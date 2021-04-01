@@ -109,6 +109,7 @@ public class BloodDonation implements Serializable {
 
     public void setBloodGroup( BloodGroup bloodGroup ) {
         this.bloodGroup = bloodGroup;
+      
     }
 
     public RhesusFactor getRhd() {
