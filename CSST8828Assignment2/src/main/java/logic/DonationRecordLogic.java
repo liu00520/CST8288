@@ -41,7 +41,7 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
 
     @Override
     public DonationRecord getWithId(int id) {
-               return get( () -> dal().findById( id ) );    
+               return get( () -> dal().findById(id));    
     
 }
 
@@ -87,9 +87,9 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         //ID is generated, so if it exists add it to the entity object
         //otherwise it does not matter as mysql will create an if for it.
         //the only time that we will have id is for update behaviour.
-        if( parameterMap.containsKey( ID ) ){
+        if( parameterMap.containsKey(ID) ){
             try {
-                donationRecordEntity.setId(Integer.parseInt( parameterMap.get(ID)[ 0 ] ) );
+                donationRecordEntity.setId(Integer.parseInt(parameterMap.get(ID)[0]));
             } catch( java.lang.NumberFormatException ex ) {
                 throw new ValidationException( ex );
             }
@@ -131,6 +131,7 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         //Validated strings
         validator.accept( hospital, 100 );
         validator.accept( administrator, 100 );
+       
       
         
             

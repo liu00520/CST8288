@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import logic.DonationRecordLogic;
 import static logic.DonationRecordLogic.PERSON_ID;
 import logic.LogicFactory;
+import logic.PersonLogic;
 
 /**
  *
@@ -134,27 +135,32 @@ public class CreateDonationRecord extends HttpServlet {
 
         
         // do i need to grab foreign key logics too?
-      // PersonLogic bDLogic = LogicFactory.getFor( "Person" );
+       PersonLogic bDLogic = LogicFactory.getFor( "Person" );
+       
+       
         
       // grabing only unique column?
-      //String record_id = request.getParameter(DonationRecordLogic.ID);
-   //   int i=Integer.parseInt(record_id); 
+      String record_id = request.getParameter(DonationRecordLogic.ID);
+   
+      //int i=Integer.parseInt(record_id); 
         //error checking for duplication
-      //  if( dRLogic.getWithId()==null){
+      //  if( record_id ==null){
             try {
                  DonationRecord donationRecord = dRLogic.createEntity(request.getParameterMap());
-               
+                //  Person person = bDLogic.createEntity(request.getParameterMap());
+                //   donationRecord.setPerson(person);
                 // create dependancy logic Person and BloodDonation. need to merge for this step
                 dRLogic.add(donationRecord );
+            
             } catch( Exception ex ) {
                 errorMessage = ex.getMessage();
             }
-       
+        
            
-      //  } else  {
+       // } else  {
             //if duplicate print the error message
-       //     errorMessage = "Record_id: \"" + i + "\" already exists";
-       //}
+      //      errorMessage = "Record_id: \"" + record_id + "\" already exists";
+      // }
         if( request.getParameter( "add" ) != null ){
             //if add button is pressed return the same page
             processRequest( request, response );

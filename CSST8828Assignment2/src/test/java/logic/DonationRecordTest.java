@@ -4,7 +4,11 @@ import common.EMFactory;
 import common.TomcatStartUp;
 import common.ValidationException;
 import entity.Account;
+import entity.BloodDonation;
+import entity.BloodGroup;
 import entity.DonationRecord;
+import entity.Person;
+import entity.RhesusFactor;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +18,12 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import javax.persistence.EntityManager;
+import static logic.DonationRecordLogic.ADMINSTRATOR;
+import static logic.DonationRecordLogic.CREATED;
+import static logic.DonationRecordLogic.DONATION_ID;
+import static logic.DonationRecordLogic.HOSPITAL;
+import static logic.DonationRecordLogic.PERSON_ID;
+import static logic.DonationRecordLogic.TESTED;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,14 +69,42 @@ class DonationRecordTest {
 
         //get an instance of EntityManager
         EntityManager em = EMFactory.getEMF().createEntityManager();
+        
+         
         //start a Transaction
         em.getTransaction().begin();
 
+      
+        //create person for dependancy 
+         Person person= em.find(Person.class,1);
+         if (person==null){
+             person=new Person();
+             person.setFirstName("John");
+        person.setLastName("Smith");
+        person.setAddress("JUNIT 5");
+        person.setPhone("123456789");
+        person.setBirth(logic.convertStringToDate("1990-10-10 10:10:10"));
+        em.persist(person);
+         }
+         //create BloodDonation for dependancy 
+         BloodDonation blDon= em.find(BloodDonation.class,1);
+         if (blDon==null){
+             blDon=new BloodDonation();
+             blDon.setMilliliters(5);
+             blDon.setBloodGroup(BloodGroup.B);
+             blDon.setRhd(RhesusFactor.Positive);
+             blDon.setCreated(logic.convertStringToDate("200-12-15 09:05:20"));
+        em.persist(blDon);
+         }
+         
         DonationRecord entity = new DonationRecord();
-        entity.setHospital( "Ottawa Hospital" );
-        entity.setAdministrator( "Smith" );
+ 
+        entity.setHospital("Ottawa Hospital");
+        entity.setAdministrator("Smith");
         entity.setTested(false);
         entity.setCreated(logic.convertStringToDate("200-12-15 09:05:20"));
+        entity.setPerson(person);
+        entity.setBloodDonation(blDon);
       
         //add an account to hibernate, account is now managed.
         //we use merge instead of add so we can get the updated generated ID.
@@ -102,6 +140,15 @@ class DonationRecordTest {
         assertEquals( originalSize - 1, list.size() );
     }
 
+      @Test
+    final void testAllEdge() {
+        List<DonationRecord> list = logic.getAll();
+        assertEquals(1, list.size());
+        logic.delete(donationRecordExpected);
+        list = logic.getAll();
+        assertTrue(list.isEmpty());
+    
+    }
     /**
      * helper method for testing all account fields
      *
@@ -110,65 +157,67 @@ class DonationRecordTest {
      */
     private void assertDonRecordEquals( DonationRecord expected, DonationRecord actual ) {
         //assert all field to guarantee they are the same
-        assertEquals( expected.getId(),actual.getId() );
-        assertEquals( expected.getHospital(),actual.getHospital() );
-        assertEquals( expected.getAdministrator(), actual.getAdministrator() );
-        assertEquals( expected.getTested(), actual.getTested() );
-        assertEquals( expected.getCreated(), actual.getCreated() );
+        assertEquals( expected.getId(),actual.getId());
         assertEquals( expected.getPerson(), actual.getPerson() );
-        assertEquals( expected.getBloodDonation(), actual.getBloodDonation() );
+        assertEquals( expected.getBloodDonation(), actual.getBloodDonation());
+        assertEquals( expected.getTested(), actual.getTested() );
+        assertEquals( expected.getAdministrator(),actual.getAdministrator());
+        assertEquals( expected.getHospital(),actual.getHospital() );
+        assertEquals( expected.getCreated(), actual.getCreated() );
+      
+     
     }
 
-
+// failing nullpointer excption
     @Test
     final void testGetWithId() {
         //using the id of test account get another account from logic
-        DonationRecord returnedRecord = logic.getWithId( donationRecordExpected.getId() );
+        DonationRecord returnedRecord = logic.getWithId(donationRecordExpected.getId() );
 
         //the two accounts (testAcounts and returnedAccounts) must be the same
        assertDonRecordEquals(donationRecordExpected, returnedRecord );
     }
 //
-//    @Test
-//    final void testGetDonationRecordWithHospital() {
-//       List<DonationRecord> returnedRecords = logic.getDonationRecordWithHospital(expectedEntity.getHospital());
-//
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//      for(DonationRecord record: returnedRecords ) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getHospital(), record.getHospital() );
-//    }
-//    }
-//    @Test
-//    final void testGetDonationRecordWithAdminstrator() {
-//       List<DonationRecord> returnedRecords = logic.getDonationRecordWithAdminstrator(expectedEntity.getAdministrator());
-//
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//      for(DonationRecord record: returnedRecords ) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getAdministrator(), record.getAdministrator() );
-//    }
-//    }
-//    @Test
-//    final void testGetDonationRecordWithTested() {
-//       List<DonationRecord> returnedRecords = logic.getDonationRecordWithTested(expectedEntity.getTested());
-//
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//      for(DonationRecord record: returnedRecords ) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getTested(), record.getTested() );
-//    }
-//    }
-//    @Test
-//    final void testFindByCreated() {
-//       List<DonationRecord> returnedRecords = logic. findByCreated(expectedEntity.getCreated());
-//
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//      for(DonationRecord record: returnedRecords ) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getCreated(), record.getCreated() );
-//    }
-//    }
+    @Test
+    final void testGetDonationRecordWithHospital() {
+       List<DonationRecord> returnedRecords = logic.getDonationRecordWithHospital(donationRecordExpected.getHospital());
+
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+      for(DonationRecord record: returnedRecords ) {
+            //all accounts must have the same password
+            assertEquals( donationRecordExpected.getHospital(), record.getHospital() );
+    }
+    }
+    @Test
+    final void testGetDonationRecordWithAdminstrator() {
+       List<DonationRecord> returnedRecords = logic.getDonationRecordWithAdminstrator(donationRecordExpected.getAdministrator());
+
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+      for(DonationRecord record: returnedRecords ) {
+            //all accounts must have the same password
+            assertEquals( donationRecordExpected.getAdministrator(), record.getAdministrator() );
+    }
+    }
+    @Test
+    final void testGetDonationRecordWithTested() {
+       List<DonationRecord> returnedRecords = logic.getDonationRecordWithTested(donationRecordExpected.getTested());
+
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+      for(DonationRecord record: returnedRecords ) {
+            //all accounts must have the same password
+            assertEquals( donationRecordExpected.getTested(), record.getTested() );
+    }
+    }
+    @Test
+    final void testFindByCreated() {
+       List<DonationRecord> returnedRecords = logic. findByCreated(donationRecordExpected.getCreated());
+
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+      for(DonationRecord record: returnedRecords ) {
+            //all accounts must have the same password
+            assertEquals( donationRecordExpected.getCreated(), record.getCreated() );
+    }
+    }
 //    // need to test person and BlookdDonation after merge
 //    @Test
 //    final void testCreateEntityAndAdd() {
@@ -195,19 +244,21 @@ class DonationRecordTest {
 //        logic.delete( returnedRecord );
 //    }
 //
-//    @Test
-//    final void testCreateEntity() {
-//        Map<String, String[]> sampleMap = new HashMap<>();
-//        sampleMap.put(DonationRecordLogic.ID, new String[]{ Integer.toString( expectedEntity.getId() ) } );
-//        sampleMap.put( DonationRecordLogic.HOSPITAL, new String[]{ expectedEntity.getHospital() } );
-//        sampleMap.put( DonationRecordLogic.ADMINSTRATOR, new String[]{ expectedEntity.getAdministrator() } );
-//       // sampleMap.put( DonationRecordLogic.CREATED, new String[]{ expectedEntity.getCreated() } );
-//       // sampleMap.put( DonationRecordLogic.TESTED, new String[]{ expectedEntity.getTested() } );
-//
-//        DonationRecord returnedRecord= logic.createEntity( sampleMap );
-//
-//        assertDonRecordEquals( expectedEntity, returnedRecord );
-//    }
+    @Test
+    final void testCreateEntity() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        sampleMap.put(DonationRecordLogic.ID, new String[]{ Integer.toString( donationRecordExpected.getId() ) } );
+         sampleMap.put( DonationRecordLogic.PERSON_ID, new String[]{ String.valueOf(donationRecordExpected.getPerson()) } );
+        sampleMap.put( DonationRecordLogic.HOSPITAL, new String[]{ donationRecordExpected.getHospital() } );
+        sampleMap.put( DonationRecordLogic.ADMINSTRATOR, new String[]{ donationRecordExpected.getAdministrator() } );
+        sampleMap.put(DonationRecordLogic.CREATED, new String[]{logic.convertDateToString( donationRecordExpected.getCreated())});
+        sampleMap.put( DonationRecordLogic.TESTED, new String[]{ String.valueOf(donationRecordExpected.getTested()) } );
+        sampleMap.put( DonationRecordLogic.DONATION_ID, new String[]{ String.valueOf(donationRecordExpected.getBloodDonation()) } );
+        
+        
+        DonationRecord returnedRecord= logic.createEntity( sampleMap );
+        assertDonRecordEquals(donationRecordExpected,returnedRecord );
+    }
 //
 //    @Test
 //    final void testCreateEntityNullAndEmptyValues() {
@@ -344,27 +395,33 @@ class DonationRecordTest {
 ////        assertEquals( sampleMap.get( AccountLogic.NAME )[ 0 ], returnedAccount.getName() );
 //    }
 //
-//    @Test
-//    final void testGetColumnNames() {
-//        List<String> list = logic.getColumnNames();
-//        assertEquals( Arrays.asList( "ID", "Name", "Nickname", "Username", "Password" ), list );
-//    }
-//
-//    @Test
-//    final void testGetColumnCodes() {
-//        List<String> list = logic.getColumnCodes();
-//        assertEquals( Arrays.asList( AccountLogic.ID, AccountLogic.NAME, AccountLogic.NICKNAME, AccountLogic.USERNAME, AccountLogic.PASSWORD ), list );
-//    }
-//
-//    @Test
-//    final void testExtractDataAsList() {
-//        List<?> list = logic.extractDataAsList( expectedEntity );
-//        assertEquals( expectedEntity.getId(), list.get( 0 ) );
-////        assertEquals( expectedEntity.getName(), list.get( 1 ) );
-////        assertEquals( expectedEntity.getNickname(), list.get( 2 ) );
-////        assertEquals( expectedEntity.getUsername(), list.get( 3 ) );
-////        assertEquals( expectedEntity.getPassword(), list.get( 4 ) );
-//    }
+    
+    
+    @Test
+    final void testGetColumnNames() {
+        List<String> list = logic.getColumnNames();
+        assertEquals( Arrays.asList( "RecordId", "Person_id", "Donation_id", "Tested", "Adminstrator", "Hospital", "Created" ), list );
+    }
+
+    @Test
+    final void testGetColumnCodes() {
+        List<String> list = logic.getColumnCodes();
+        assertEquals( Arrays.asList( DonationRecordLogic.ID, DonationRecordLogic.PERSON_ID, DonationRecordLogic.DONATION_ID,
+                DonationRecordLogic.TESTED, DonationRecordLogic.ADMINSTRATOR, 
+                DonationRecordLogic.HOSPITAL, DonationRecordLogic.CREATED ), list );
+    }
+
+    @Test
+    final void testExtractDataAsList() {
+        List<?> list = logic.extractDataAsList( donationRecordExpected );
+        assertEquals( donationRecordExpected.getId(), list.get( 0 ) );
+        assertEquals( donationRecordExpected.getPerson(), list.get( 1 ) );
+        assertEquals( donationRecordExpected.getBloodDonation(), list.get( 2 ) );
+        assertEquals( donationRecordExpected.getTested(), list.get( 3 ) );
+        assertEquals( donationRecordExpected.getAdministrator(), list.get( 4 ) );
+        assertEquals( donationRecordExpected.getHospital(), list.get( 5 ) );
+        assertEquals( donationRecordExpected.getCreated(), list.get( 6 ) );
+    }
 }
 
     

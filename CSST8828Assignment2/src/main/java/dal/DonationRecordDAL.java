@@ -4,8 +4,7 @@ import entity.DonationRecord;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import entity.Person;
-import entity.BloodDonation;
+
 import java.util.Date;
 
 /**
