@@ -123,10 +123,14 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         String hospital = parameterMap.get( HOSPITAL )[ 0 ];
         String administrator = parameterMap.get( ADMINSTRATOR )[ 0 ];
         String tested = parameterMap.get(TESTED)[ 0 ];
-       
+        
+     //   String person= parameterMap.get(PERSON_ID)[0];
+     //   String bloodDonation=parameterMap.get(DONATION_ID)[0];
        // convert string to boolean
         boolean testBoolean=Boolean.parseBoolean(tested); 
         Date date = this.convertStringToDate(dd);
+//        String id = parameterMap.get( ID )[ 0 ];
+        
         
         //Validated strings
         validator.accept( hospital, 100 );
@@ -141,6 +145,8 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
        donationRecordEntity.setHospital(hospital );
        donationRecordEntity.setAdministrator(administrator );
        donationRecordEntity.setCreated(date);
+//       donationRecordEntity.setId(Integer.parseInt(id));
+       
 
 
         return donationRecordEntity;
