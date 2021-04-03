@@ -15,8 +15,8 @@ import javax.persistence.EntityManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * @author Mark Newport
- * Testing each PersonLogic method for edge, normal, and error case
+ * Testing each PersonLogic method for the different cases
  */
 public class PersonLogicTest {
     
@@ -42,6 +42,10 @@ public class PersonLogicTest {
         TomcatStartUp.stopAndDestroyTomcat();
     }
     
+    /**
+     * Getting an instance of EntityManager & creating a Person entity. Used the
+     * String-date converter for the birth date
+     */
     @BeforeEach
     final void setUp() throws Exception {
         logic = LogicFactory.getFor("Person");
@@ -85,24 +89,27 @@ public class PersonLogicTest {
     }
     
     @Test
-    final void testGetWithIdNormal() {
-        Person person = logic.getWithId(personExpected.getId());
-        assertNotNull(person);
-        person.setId(20);
-        assertNotEquals(logic.getWithId(person.getId()), personExpected.getId());
-    }
-    
-    @Test
-    final void testGetWithIdInvalid() {
-        personExpected.setId(null);
+    final void testGetWithIdEdge() {
         assertNotNull(personExpected);
-        assertThrows(NullPointerException.class,() -> logic.getWithId(personExpected.getId()));
+        logic.delete(personExpected);
+        assertNull(logic.getWithId(personExpected.getId()));
     }
-    
+     
+   /**
+     * getPersonWithPhone returns a list so we loop through the list and 
+     * match the entities off the ids. Then pass them into the helper method to
+     * check that the methods are the same. The next 4 tests use the same format
+     */
+    @Test
     final void testGetPersonWithPhone() {
+        assertNotNull(personExpected);
         List<Person> phonePerson = logic.getPersonWithPhone(personExpected.getPhone());
-        assertTrue(phonePerson.contains(personExpected));
-        assertEquals(2, phonePerson.size());
+        for(Person person : phonePerson) {
+            assertEquals(personExpected.getPhone(), person.getPhone());
+            if(person.getId().equals(personExpected.getId())) {
+                assertPersonEquals(personExpected, person);
+            }
+        }
     }
     
     @Test
@@ -128,13 +135,25 @@ public class PersonLogicTest {
             }
         }
     }
-    
+
     @Test
     final void testGetPersonWithAddress() {
         assertNotNull(personExpected);
         List<Person> address = logic.getPersonWithAddress(personExpected.getAddress());
         for(Person person : address) {
             assertEquals(personExpected.getAddress(), person.getAddress());
+            if(person.getId().equals(personExpected.getId())) {
+                assertPersonEquals(personExpected, person);
+            }
+        }
+    }
+    
+    @Test
+    final void testGetPersonWithBirth() {
+        assertNotNull(personExpected);
+        List<Person> birth = logic.getPersonWithBirth(personExpected.getBirth());
+        for(Person person : birth) {
+            assertEquals(personExpected.getBirth(), person.getBirth());
             if(person.getId().equals(personExpected.getId())) {
                 assertPersonEquals(personExpected, person);
             }
@@ -155,6 +174,10 @@ public class PersonLogicTest {
         assertPersonEquals(personExpected, created);
     }
     
+    /**
+     * Creating an entity and adding it. Set the format of the date to exclude the
+     * "T" so it would properly assertEqual
+     */
     @Test
     final void testCreateEntityAdd() {
         Map<String, String[]> testMap = new HashMap<>();
@@ -230,8 +253,8 @@ public class PersonLogicTest {
             testMap.put(PersonLogic.BIRTH, new String[]{logic.convertDateToString(personExpected.getBirth())});
         };
         
-        IntFunction<String> generateString = (int length) -> {
-            return new Random().ints('a','z'+1).limit(length).collect(
+        IntFunction<String> generateString = (int e) -> {
+            return new Random().ints('a','z'+1).limit(e).collect(
                     StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
         };
       
@@ -251,9 +274,69 @@ public class PersonLogicTest {
         testMap.replace(PersonLogic.LAST_NAME, new String[]{""});
         assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
         fillMap.accept(testMap);
-        testMap.replace(PersonLogic.ID, new String[]{generateString.apply(51)});
+        testMap.replace(PersonLogic.LAST_NAME, new String[]{generateString.apply(51)});
         assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
         
+        testMap.replace(PersonLogic.PHONE, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap);
+        testMap.replace(PersonLogic.PHONE, new String[]{generateString.apply(16)});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(PersonLogic.ADDRESS, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap);
+        testMap.replace(PersonLogic.ADDRESS, new String[]{generateString.apply(101)});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(PersonLogic.BIRTH, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap);
+        testMap.replace(PersonLogic.BIRTH, new String[]{"2020-10-10T10:10"});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+    }
+    
+    /**
+     * Testing both edge cases(min, max), birth date assumed min, max values
+     */
+    @Test
+    final void testCreateEntityEdgeCase() {
+        IntFunction<String> generateString = (int e) -> {
+            return new Random().ints('a','z'+1).limit(e).collect(
+                    StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+        };
+        
+        Map<String, String[]> testMap = new HashMap<>();
+        testMap.put(PersonLogic.ID, new String[]{Integer.toString(1)});
+        testMap.put(PersonLogic.FIRST_NAME, new String[]{ generateString.apply(1)});
+        testMap.put(PersonLogic.LAST_NAME, new String[]{ generateString.apply(1)});
+        testMap.put(PersonLogic.PHONE, new String[]{ generateString.apply(1)});
+        testMap.put(PersonLogic.ADDRESS, new String[]{ generateString.apply(1)});
+        testMap.put(PersonLogic.BIRTH, new String[]{"0001-01-01 01:00:00"});
+        
+        Person returned = logic.createEntity(testMap);
+        assertEquals(Integer.parseInt(testMap.get(PersonLogic.ID)[0]), returned.getId());
+        assertEquals(testMap.get(PersonLogic.FIRST_NAME)[0], returned.getFirstName());
+        assertEquals(testMap.get(PersonLogic.LAST_NAME)[0], returned.getLastName());
+        assertEquals(testMap.get(PersonLogic.PHONE)[0], returned.getPhone());
+        assertEquals(testMap.get(PersonLogic.ADDRESS)[0], returned.getAddress());
+        assertEquals(testMap.get(PersonLogic.BIRTH)[0], logic.convertDateToString(returned.getBirth()));
+        
+        testMap = new HashMap<>();
+        testMap.put(PersonLogic.ID, new String[]{Integer.toString(1)});
+        testMap.put(PersonLogic.FIRST_NAME, new String[]{ generateString.apply(50)});
+        testMap.put(PersonLogic.LAST_NAME, new String[]{ generateString.apply(50)});
+        testMap.put(PersonLogic.PHONE, new String[]{ generateString.apply(15)});
+        testMap.put(PersonLogic.ADDRESS, new String[]{ generateString.apply(100)});
+        testMap.put(PersonLogic.BIRTH, new String[]{"9999-12-30 24:59:59"});
+        
+        returned = logic.createEntity(testMap);
+        assertEquals(Integer.parseInt(testMap.get(PersonLogic.ID)[0]), returned.getId());
+        assertEquals(testMap.get(PersonLogic.FIRST_NAME)[0], returned.getFirstName());
+        assertEquals(testMap.get(PersonLogic.LAST_NAME)[0], returned.getLastName());
+        assertEquals(testMap.get(PersonLogic.PHONE)[0], returned.getPhone());
+        assertEquals(testMap.get(PersonLogic.ADDRESS)[0], returned.getAddress());
+        assertEquals(testMap.get(PersonLogic.BIRTH)[0], logic.convertDateToString(returned.getBirth()));
     }
     
     @Test 
