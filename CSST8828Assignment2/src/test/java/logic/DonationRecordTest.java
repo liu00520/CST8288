@@ -80,9 +80,9 @@ class DonationRecordTest {
       Person  person= em.find(Person.class,1);
          if (person==null){
              person=new Person();
-             person.setFirstName("John");
-             person.setLastName("Smith");
-             person.setAddress("JUNIT 5");
+             person.setFirstName("Lily");
+             person.setLastName("Johns");
+             person.setAddress("JUNIT 5 Test");
              person.setPhone("123456789");
              person.setBirth(logic.convertStringToDate("1990-10-10 10:10:10"));
                em.persist(person);
@@ -100,7 +100,6 @@ class DonationRecordTest {
          }
          
         DonationRecord entity = new DonationRecord();
- 
         entity.setHospital("Ottawa Hospital");
         entity.setAdministrator("Smith");
         entity.setTested(false);
@@ -110,7 +109,7 @@ class DonationRecordTest {
       
         //add an account to hibernate, account is now managed.
         //we use merge instead of add so we can get the updated generated ID.
-        donationRecordExpected = em.merge( entity );
+        donationRecordExpected = em.merge(entity);
         //commit the changes
         em.getTransaction().commit();
         //close EntityManager
@@ -151,7 +150,7 @@ class DonationRecordTest {
      */
     private void assertDonRecordEquals( DonationRecord expected, DonationRecord actual ) {
         //assert all field to guarantee they are the same
-        assertDonRecordEquals(expected, actual, false);
+        assertDonRecordEquals(expected, actual,true);
     }
     private void assertDonRecordEquals( DonationRecord expected, DonationRecord actual, boolean testDepend ) {
         //assert all field to guarantee they are the same
@@ -169,14 +168,11 @@ class DonationRecordTest {
 // failing nullpointer excption
     @Test
     final void testGetWithId() {
-        //using the id of test account get another account from logic
-        DonationRecord returnedRecord = logic.getWithId(donationRecordExpected.getId() );
-
-        System.out.println(logic.getWithId(donationRecordExpected.getId()));
-        //the two accounts (testAcounts and returnedAccounts) must be the same
-       assertDonRecordEquals(donationRecordExpected, returnedRecord);
+       
+        
+       DonationRecord returnedRecord = logic.getWithId(donationRecordExpected.getId());
+       assertDonRecordEquals(donationRecordExpected, returnedRecord,true);
     }
-//
     @Test
     final void testGetDonationRecordWithHospital() {
        List<DonationRecord> returnedRecords = logic.getDonationRecordWithHospital(donationRecordExpected.getHospital());
@@ -217,7 +213,7 @@ class DonationRecordTest {
             assertEquals( donationRecordExpected.getCreated(), record.getCreated() );
     }
     }
-//    // need to test person and BlookdDonation after merge
+
 //    @Test
 //    final void testCreateEntityAndAdd() {
 //        Map<String, String[]> sampleMap = new HashMap<>();
@@ -247,88 +243,211 @@ class DonationRecordTest {
     final void testCreateEntity() {
         Map<String, String[]> sampleMap = new HashMap<>();
         sampleMap.put(DonationRecordLogic.ID, new String[]{ Integer.toString( donationRecordExpected.getId() ) } );
-//        sampleMap.put( DonationRecordLogic.PERSON_ID, new String[]{String.valueOf(donationRecordExpected.getPerson()) } );
         sampleMap.put( DonationRecordLogic.HOSPITAL, new String[]{ donationRecordExpected.getHospital() } );
         sampleMap.put( DonationRecordLogic.ADMINSTRATOR, new String[]{ donationRecordExpected.getAdministrator() } );
         sampleMap.put(DonationRecordLogic.CREATED, new String[]{logic.convertDateToString( donationRecordExpected.getCreated())});
         sampleMap.put( DonationRecordLogic.TESTED, new String[]{ String.valueOf(donationRecordExpected.getTested()) } );
-//        sampleMap.put( DonationRecordLogic.DONATION_ID, new String[]{ String.valueOf(donationRecordExpected.getBloodDonation()) } );
         
         
         DonationRecord returnedRecord= logic.createEntity( sampleMap );
         assertDonRecordEquals(donationRecordExpected,returnedRecord,false);
     }
 //
-//    @Test
-//    final void testCreateEntityNullAndEmptyValues() {
-//        Map<String, String[]> sampleMap = new HashMap<>();
-//        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
-//            map.clear();
-//            map.put( AccountLogic.ID, new String[]{ Integer.toString( expectedEntity.getId() ) } );
-////            map.put( AccountLogic.NICKNAME, new String[]{ expectedEntity.getNickname() } );
-////            map.put( AccountLogic.USERNAME, new String[]{ expectedEntity.getUsername() } );
-////            map.put( AccountLogic.PASSWORD, new String[]{ expectedEntity.getPassword() } );
-////            map.put( AccountLogic.NAME, new String[]{ expectedEntity.getName() } );
-//        };
+    @Test
+    final void testCreateEntityNullAndEmptyValuesID() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.ID, new String[]{ Integer.toString( donationRecordExpected.getId() ) } );
+         
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.ID, null );
+        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
+     
+        
+    }
+    
+    
+    @Test
+    final void testCreateEntityEmptyValuesID() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.ID, new String[]{ Integer.toString( donationRecordExpected.getId() ) } );
+         
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.ID, new String[]{} );
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
+        
+    }
+    
+    
+       @Test
+    final void testCreateEntityNullAndEmptyValuesTested() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.TESTED, new String[]{String.valueOf(donationRecordExpected.getTested()) } );
+   
+        };
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.TESTED, null );
+        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
+       
+        
+    }
+      @Test
+    final void testCreateEntityEmptyValuesTested() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.TESTED, new String[]{String.valueOf(donationRecordExpected.getTested()) } );
+   
+        };
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace(DonationRecordLogic.TESTED, new String[]{} );
+        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
+        
+    }
+    
+     @Test
+    final void testCreateEntityNullValuesHospital() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.HOSPITAL, new String[]{donationRecordExpected.getHospital()} );
+           
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.HOSPITAL, null );
+        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
+       
+        
+    }
+    
+    
+     @Test
+    final void testCreateEntityNullAndEmptyValuesHospital() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.HOSPITAL, new String[]{donationRecordExpected.getHospital()} );
+           
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.HOSPITAL, null );
+        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
+       
+        
+    }
+    
+    
+    @Test
+    final void testCreateEntityEmptyValuesAdmin() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.ADMINSTRATOR, new String[]{donationRecordExpected.getAdministrator()} );
+          
+        };
 //
 //        //idealy every test should be in its own method
-//        fillMap.accept( sampleMap );
-//        sampleMap.replace( AccountLogic.ID, null );
-//        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
-//        sampleMap.replace( AccountLogic.ID, new String[]{} );
-//        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
-//
-//        fillMap.accept( sampleMap );
-//        sampleMap.replace( AccountLogic.NAME, null );
-//        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
-//        sampleMap.replace( AccountLogic.NAME, new String[]{} );
-//        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
-//
-//        fillMap.accept( sampleMap );
-//        //can be null
-//        sampleMap.replace( AccountLogic.NICKNAME, new String[]{} );
-//        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
-//
-//        fillMap.accept( sampleMap );
-//        sampleMap.replace( AccountLogic.USERNAME, null );
-//        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
-//        sampleMap.replace( AccountLogic.USERNAME, new String[]{} );
-//        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
-//
-//        fillMap.accept( sampleMap );
-//        sampleMap.replace( AccountLogic.PASSWORD, null );
-//        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
-//        sampleMap.replace( AccountLogic.PASSWORD, new String[]{} );
-//        assertThrows( IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
-//    }
-//
-//    @Test
-//    final void testCreateEntityBadLengthValues() {
-//        Map<String, String[]> sampleMap = new HashMap<>();
-//        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
-//            map.clear();
-//            map.put( AccountLogic.ID, new String[]{ Integer.toString( expectedEntity.getId() ) } );
-////            map.put( AccountLogic.NICKNAME, new String[]{ expectedEntity.getNickname() } );
-////            map.put( AccountLogic.USERNAME, new String[]{ expectedEntity.getUsername() } );
-////            map.put( AccountLogic.PASSWORD, new String[]{ expectedEntity.getPassword() } );
-////            map.put( AccountLogic.NAME, new String[]{ expectedEntity.getName() } );
-//        };
-//
-//        IntFunction<String> generateString = ( int length ) -> {
-//            //https://www.baeldung.com/java-random-string#java8-alphabetic
-//            //from 97 inclusive to 123 exclusive
-//            return new Random().ints( 'a', 'z' + 1 ).limit( length )
-//                    .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append )
-//                    .toString();
-//        };
+        fillMap.accept( sampleMap );
+        sampleMap.replace(DonationRecordLogic.ADMINSTRATOR, new String[]{} );
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
+        
+    }
+    
+    
+    @Test
+    final void testCreateEntityNullValuesDate() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.CREATED, new String[]{String.valueOf(donationRecordExpected.getCreated())} );
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.CREATED, null );
+        assertThrows( NullPointerException.class, () -> logic.createEntity( sampleMap ) );
+       
+    }
+    
+    
+     @Test
+    final void testCreateEntityEmotyValuesDate() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put( DonationRecordLogic.CREATED, new String[]{String.valueOf(donationRecordExpected.getCreated())} );
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace(DonationRecordLogic.CREATED, new String[]{} );
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
+        
+    }
+    
+    
+     @Test
+    final void testCreateEntityEmptyValuesPerson() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+            map.clear();
+            map.put(DonationRecordLogic.PERSON_ID, new String[]{String.valueOf(donationRecordExpected.getPerson().getId())} );
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( sampleMap );
+        sampleMap.replace(DonationRecordLogic.PERSON_ID, new String[]{} );
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity( sampleMap ) );
+        
+    }
+    
+
+    @Test
+    final void testCreateEntityBadLengthValues() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+             map.clear();
+            map.put( DonationRecordLogic.ID, new String[]{ Integer.toString( donationRecordExpected.getId() ) } );
+          //  map.put( DonationRecordLogic.PERSON_ID, new String[]{ Integer.toString(donationRecordExpected.getPerson().getId())} );
+        //    map.put( DonationRecordLogic.DONATION_ID, new String[]{ Integer.toString(donationRecordExpected.getBloodDonation().getId())} );
+            map.put( DonationRecordLogic.TESTED, new String[]{String.valueOf(donationRecordExpected.getTested()) } );
+            map.put( DonationRecordLogic.HOSPITAL, new String[]{ donationRecordExpected.getHospital()} );
+            map.put( DonationRecordLogic.ADMINSTRATOR, new String[]{ donationRecordExpected.getAdministrator()} );
+            map.put( DonationRecordLogic.CREATED, new String[]{String.valueOf(donationRecordExpected.getCreated())} );
+        };
+
+        IntFunction<String> generateString = ( int length ) -> {
+            //https://www.baeldung.com/java-random-string#java8-alphabetic
+            //from 97 inclusive to 123 exclusive
+            return new Random().ints( 'a', 'z' + 1 ).limit( length )
+                    .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append )
+                    .toString();
+        };
 //
 //        //idealy every test should be in its own method
-//        fillMap.accept( sampleMap );
-//        sampleMap.replace( AccountLogic.ID, new String[]{ "" } );
-//        assertThrows( ValidationException.class, () -> logic.createEntity( sampleMap ) );
-//        sampleMap.replace( AccountLogic.ID, new String[]{ "12b" } );
-//        assertThrows( ValidationException.class, () -> logic.createEntity( sampleMap ) );
-//
+        fillMap.accept( sampleMap );
+        sampleMap.replace( DonationRecordLogic.ID, new String[]{ "" } );
+        assertThrows( ValidationException.class, () -> logic.createEntity( sampleMap ) );
+        sampleMap.replace( DonationRecordLogic.ID, new String[]{ "12b" } );
+        assertThrows( ValidationException.class, () -> logic.createEntity( sampleMap ) );
+    }
 //        fillMap.accept( sampleMap );
 //        sampleMap.replace( AccountLogic.NICKNAME, new String[]{ "" } );
 //        assertThrows( ValidationException.class, () -> logic.createEntity( sampleMap ) );

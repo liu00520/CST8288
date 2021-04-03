@@ -163,7 +163,7 @@ public class DonationRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.DonationRecord[ recordId=" + recordId + " ]";
+        return "entity.DonationRecord[ recordId= " + recordId + " ]";
     }
 
 }
