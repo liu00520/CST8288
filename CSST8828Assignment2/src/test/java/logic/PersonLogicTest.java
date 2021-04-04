@@ -98,7 +98,7 @@ public class PersonLogicTest {
    /**
      * getPersonWithPhone returns a list so we loop through the list and 
      * match the entities off the ids. Then pass them into the helper method to
-     * check that the methods are the same. The next 4 tests use the same format
+     * check that the methods are equal. The next 4 tests use the same format
      */
     @Test
     final void testGetPersonWithPhone() {
@@ -158,6 +158,26 @@ public class PersonLogicTest {
                 assertPersonEquals(personExpected, person);
             }
         }
+    }
+    
+    /**
+     * Getting part of the persons firstName(subString), returning a list containing
+     * entities with that in their first name. Looping through to validate they are 
+     * the same based off of ids & only 1 entity containing that id
+     */
+    @Test
+    final void testSearch() {
+        int foundFull = 0;
+        String searchStr = personExpected.getFirstName().substring(2,4);
+        List<Person> returned = logic.search(searchStr);
+        for(Person person : returned) {
+            assertTrue(person.getFirstName().contains(searchStr));
+            if(person.getId().equals(personExpected.getId())) {
+                assertPersonEquals(personExpected, person);
+                foundFull++;
+            }
+        }
+        assertEquals(1, foundFull);
     }
     
     @Test
@@ -239,6 +259,10 @@ public class PersonLogicTest {
         assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
     }
     
+    /**
+     * Testing bad lengths of the methods (outside max, min edge cases) that throw
+     * ValidationExceptions. generateString to prevent manually typing 101 chars 
+     */
     @Test
     final void testCreateEntityBadLength() {
         Map<String, String[]> testMap = new HashMap<>();
@@ -363,6 +387,9 @@ public class PersonLogicTest {
         assertEquals(personExpected.getBirth(), list.get(5));
     }
    
+    /**
+     * Testing outside the total amount of columns to verify it throws an exception
+     */
     @Test
     final void testExtractDataAsListInvalid() {
         List<?> list = logic.extractDataAsList(personExpected);

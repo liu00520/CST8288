@@ -15,7 +15,9 @@ import logic.PersonLogic;
 
 /**
  *
- * @author markg
+ * @author Jia Liu, Sarah Kelly, Danny Pham, Mark Newport
+ * Servlet that accepts input (creates) for all entities; Used the provided CSS
+ * file provided (May update for bonus?)
  */
 @WebServlet(name = "DonateBloodForm", urlPatterns = {"/DonateBloodFrom"})
 public class DonateBloodForm extends HttpServlet {
@@ -44,6 +46,7 @@ public class DonateBloodForm extends HttpServlet {
             out.println("<body>");
             out.println("<form method=\"post\">");
             //use this to create a border & only 1 div wrapped for the input type
+            //Accepting and creating the person entity 
             out.println("<div class=\"grid-container\">");
             out.println("<div class=\"item\"><h2>Person</h2></div>");
             out.println("<div class=\"item\">First Name</div>");
@@ -108,6 +111,7 @@ public class DonateBloodForm extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * doPost that creates All 4 new entities after submitting if the input is correct
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
