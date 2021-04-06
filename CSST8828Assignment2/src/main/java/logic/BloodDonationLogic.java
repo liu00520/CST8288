@@ -97,26 +97,30 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
 
 
         
-        String bankId = parameterMap.get(BANK_ID) [ 0 ];
+        //String bankId = parameterMap.get(BANK_ID) [ 0 ];
         String milliliters = parameterMap.get(MILLILITERS) [ 0 ];
         String bloodGroup = parameterMap.get(BLOOD_GROUP)[ 0 ];
-        String rhesusFactor = parameterMap.get(RHESUS_FACTOR) [ 0 ];
+        //String rhesusFactor = parameterMap.get(RHESUS_FACTOR) [ 0 ];
         //extracting date from map
         String date = parameterMap.get(CREATED) [ 0 ];
         String id = parameterMap.get( ID )[ 0 ];
         
+        RhesusFactor rhesusFactor = this.convertToEntityAttribute(parameterMap.get(RHESUS_FACTOR)[0]);
+        
+        
         //validating the data
         validator.accept(milliliters, 100);
         validator.accept(bloodGroup, 8);
-        validator.accept(rhesusFactor, 2);
+        //validator.accept(rhesusFactor, 2);
         validator.accept(id, 45);
         
         //converting date to appropriate format
         entity.setCreated(convertStringToDate(date));
-        
+        bloodGroup.valueOf(id);
+                
         //setting the values on the entity
         entity.setMilliliters(Integer.parseInt(milliliters));
-        entity.setRhd(rhesusFactor);
+        entity.setRhd(rhesusFactor); 
         entity.setId(Integer.parseInt(id));
         entity.setBloodGroup(bloodGroup);
           
@@ -146,6 +150,11 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
             Logger.getLogger( GenericLogic.class.getName() ).log( Level.SEVERE, null, ex );
             throw new ValidationException( "failed to format String=\"" + date + "\" to a date object", ex );
         }
+    }
+    
+    
+    public RhesusFactor convertToEntityAttribute( String dbData ) {
+        return RhesusFactor.getRhesusFactor( dbData );
     }
     
 }
