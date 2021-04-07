@@ -26,7 +26,7 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     @Override
     public DonationRecord findById(int id) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
+        map.put("recordId", id);
 
         return findResult("DonationRecord.findByRecordId", map);
     }
@@ -62,7 +62,7 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     public List<DonationRecord> findByPerson(int personId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("person_id", personId);
+        map.put("personId", personId);
 
         return findResults("DonationRecord.findByPerson", map);
 
@@ -72,7 +72,7 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     public List<DonationRecord> findByDonation(int donationId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("donation_id", donationId);
+        map.put("donationId", donationId);
 
         return findResults("DonationRecord.findByDonation", map);
 
