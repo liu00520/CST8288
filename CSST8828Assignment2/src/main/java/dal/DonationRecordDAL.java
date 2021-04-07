@@ -4,8 +4,7 @@ import entity.DonationRecord;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import entity.Person;
-import entity.BloodDonation;
+
 import java.util.Date;
 
 /**
@@ -25,9 +24,9 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     }
 
     @Override
-    public DonationRecord findById(int recordId) {
+    public DonationRecord findById(int id) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", recordId);
+        map.put("recordId", id);
 
         return findResult("DonationRecord.findByRecordId", map);
     }
@@ -63,7 +62,7 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     public List<DonationRecord> findByPerson(int personId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("person_id", personId);
+        map.put("personId", personId);
 
         return findResults("DonationRecord.findByPerson", map);
 
@@ -73,7 +72,7 @@ public class DonationRecordDAL extends GenericDAL<DonationRecord> {
     public List<DonationRecord> findByDonation(int donationId) {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("donation_id", donationId);
+        map.put("donationId", donationId);
 
         return findResults("DonationRecord.findByDonation", map);
 

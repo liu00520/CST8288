@@ -1,22 +1,16 @@
 package logic;
 
-import static com.mysql.cj.MysqlType.DATETIME;
+
 import common.ValidationException;
 import dal.DonationRecordDAL;
 import entity.DonationRecord;
-import java.text.ParseException;
-
-import java.text.SimpleDateFormat;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.ObjIntConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -47,7 +41,7 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
 
     @Override
     public DonationRecord getWithId(int id) {
-               return get( () -> dal().findById( id ) );    
+               return get( () -> dal().findById(id));    
     
 }
 
@@ -93,9 +87,9 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
         //ID is generated, so if it exists add it to the entity object
         //otherwise it does not matter as mysql will create an if for it.
         //the only time that we will have id is for update behaviour.
-        if( parameterMap.containsKey( ID ) ){
+        if( parameterMap.containsKey(ID) ){
             try {
-                donationRecordEntity.setId( Integer.parseInt( parameterMap.get( ID )[ 0 ] ) );
+                donationRecordEntity.setId(Integer.parseInt(parameterMap.get(ID)[0]));
             } catch( java.lang.NumberFormatException ex ) {
                 throw new ValidationException( ex );
             }
@@ -126,31 +120,31 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
          
        
         String dd= parameterMap.get(CREATED)[0].replace("T", " ");
-        
- 
-        Date date = this.convertStringToDate(dd);
-     
-        
-     
         String hospital = parameterMap.get( HOSPITAL )[ 0 ];
         String administrator = parameterMap.get( ADMINSTRATOR )[ 0 ];
         String tested = parameterMap.get(TESTED)[ 0 ];
-       
+        
+     
        // convert string to boolean
-        boolean testBoolean=Boolean.parseBoolean(tested);  
+        boolean testBoolean=Boolean.parseBoolean(tested); 
+        Date date = this.convertStringToDate(dd);
+
+        
         
         //Validated strings
         validator.accept( hospital, 100 );
         validator.accept( administrator, 100 );
+       
       
         
             
 
-        //set values on entity
+       //set values on entity
        donationRecordEntity.setTested(testBoolean);
        donationRecordEntity.setHospital(hospital );
        donationRecordEntity.setAdministrator(administrator );
        donationRecordEntity.setCreated(date);
+       
 
 
         return donationRecordEntity;
