@@ -7,8 +7,8 @@ package logic;
  * @author Shariar (Shawn) Emami
  */
 class BloodDonationTest {
-//
-//    private BloodDonationLogic logic;
+
+    private BloodDonationLogic logic;
 //    private BloodDonation expectedEntity;
 //
 //    @BeforeAll
