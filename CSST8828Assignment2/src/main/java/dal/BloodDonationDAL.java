@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class BloodDonationDAL extends GenericDAL<BloodDonation> {
 
-    public BloodDonationDAL(Class<BloodDonation> entityClass) {
+    public BloodDonationDAL() {
         super(BloodDonation.class);
     }
 
