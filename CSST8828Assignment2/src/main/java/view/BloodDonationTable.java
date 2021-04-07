@@ -1,5 +1,6 @@
 package view;
 
+import entity.BloodDonation;
 import entity.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +43,7 @@ public class BloodDonationTable extends HttpServlet {
             out.println("<table style=\"margin-left: auto; margin-right: auto;\" border=\"1\">");
             out.println("<caption>BloodDonation</caption>");
             
-            Logic<Person> logic = LogicFactory.getFor("BloodDonation");
+            Logic<BloodDonation> logic = LogicFactory.getFor("BloodDonation");
             out.print("<tr>");
             logic.getColumnNames().forEach(e -> out.printf("<th>%s</th>", e));
             
