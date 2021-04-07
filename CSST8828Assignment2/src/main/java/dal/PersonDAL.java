@@ -8,7 +8,10 @@ import java.util.Map;
 
 /**
  *
- * @author markg
+ * @author Mark Newport 
+ * Person Data Access Object class; all return findResults of GenericDAL with
+ * first parameter being the named query at the beginning of Person class & second 
+ * parameter map for parameter substitution (except findAll everything is being returned)
  */
 public class PersonDAL extends GenericDAL<Person>{
 
@@ -56,5 +59,11 @@ public class PersonDAL extends GenericDAL<Person>{
         Map<String, Object> map = new HashMap<>();
         map.put("birth", birth);
         return findResults("Person.findByBirth", map);
+    }
+    
+        public List<Person> findContaining( String search ) {
+        Map<String, Object> map = new HashMap<>();
+        map.put( "search", search );
+        return findResults( "Person.findContaining", map );
     }
 }

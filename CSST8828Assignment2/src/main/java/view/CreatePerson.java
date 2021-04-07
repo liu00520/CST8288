@@ -54,8 +54,7 @@ public class CreatePerson extends HttpServlet {
             out.println("Address:");
             out.printf("<br><input type=\"text\" name=\"%s\" value=\"\"><br><br>", PersonLogic.ADDRESS );
             out.println("Birthdate:");
-            out.printf("<br><input type=\"datetime-local\" step='1' name=\"%s\" value=\"\"><br><br>", PersonLogic.BIRTH );
-           
+            out.printf("<br><input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\"><br><br>", PersonLogic.BIRTH );
             out.println( "<input type=\"submit\" name=\"view\" value=\"Add and View\">" );
             out.println( "<input type=\"submit\" name=\"add\" value=\"Add\">" );
             out.println( "</form>" );
@@ -117,9 +116,9 @@ public class CreatePerson extends HttpServlet {
             errorMessage = e.getMessage();
         }
         if( request.getParameter("add") != null ) {
-        processRequest( request, response );
+        processRequest(request, response);
         }
-        else if( request.getParameter("view") != null ) { 
+        else if(request.getParameter("view") != null) { 
             response.sendRedirect("PersonTable");
         }
     }
