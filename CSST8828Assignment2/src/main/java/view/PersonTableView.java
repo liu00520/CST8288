@@ -26,6 +26,8 @@ public class PersonTableView extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * Displaying all entities using extractDataAsList method. Print function &
+     * Collections forEach loop to prevent manually typing everything
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
