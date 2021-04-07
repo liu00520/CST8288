@@ -30,8 +30,8 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
     public static final String ID = "id";
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat( "yyyy-MM-dd kk:mm:ss" );
 
-    public BloodDonationLogic(BloodDonationDAL dal) {
-        super(dal);
+    BloodDonationLogic() {
+        super( new BloodDonationDAL() );
     }
     
     @Override
@@ -105,24 +105,29 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         String date = parameterMap.get(CREATED) [ 0 ];
         String id = parameterMap.get( ID )[ 0 ];
         
+        //called method on RhesusFactorConverter to convert from string to rhesus
         RhesusFactor rhesusFactor = this.convertToEntityAttribute(parameterMap.get(RHESUS_FACTOR)[0]);
+        
+        //conversion, calling BloodGroup class, storing in a variable of type BloodGroup
+        BloodGroup group = BloodGroup.valueOf(bloodGroup);
         
         
         //validating the data
         validator.accept(milliliters, 100);
-        validator.accept(bloodGroup, 8);
+        //validator.accept(bloodGroup, 8);
         //validator.accept(rhesusFactor, 2);
         validator.accept(id, 45);
         
         //converting date to appropriate format
         entity.setCreated(convertStringToDate(date));
-        bloodGroup.valueOf(id);
+        
+        //BloodGroup.valueOf(bloodGroup);
                 
         //setting the values on the entity
         entity.setMilliliters(Integer.parseInt(milliliters));
         entity.setRhd(rhesusFactor); 
         entity.setId(Integer.parseInt(id));
-        entity.setBloodGroup(bloodGroup);
+        entity.setBloodGroup(group);
           
         return entity;
     }
