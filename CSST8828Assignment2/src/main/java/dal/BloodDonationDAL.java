@@ -27,7 +27,7 @@ public class BloodDonationDAL extends GenericDAL<BloodDonation> {
     @Override
     public BloodDonation findById(int donationId) {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", donationId);
+        map.put("donationId", donationId);
         
         return findResult("BloodDonation.findById", map);
     }
