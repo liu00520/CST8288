@@ -228,7 +228,7 @@ class BloodDonationTest {
         
         
         BloodDonation returnedDonation= logic.createEntity( testMap );
-        assertBloodDonationEquals(expectedEntity,returnedDonation);
+        assertBloodDonationEquals(expectedEntity,returnedDonation, false);
     }
     
     @Test
@@ -280,7 +280,7 @@ class BloodDonationTest {
         sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"0001-01-01 01:00:00"});
 
-        //idealy every test should be in its own method
+        //ideally every test should be in its own method
         BloodDonation returnedDonation = logic.createEntity( sampleMap );
         assertEquals(Integer.parseInt(sampleMap.get(BloodDonationLogic .ID)[0]), returnedDonation.getId());
         assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
