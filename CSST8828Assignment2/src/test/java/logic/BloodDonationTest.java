@@ -332,7 +332,7 @@ class BloodDonationTest {
     @Test
     final void testExtractDataAsListInvalid() {
         List<?> list = logic.extractDataAsList(expectedEntity);
-        assertThrows(IndexOutOfBoundsException.class, () -> list.get(5));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(7));
     }
 
     
