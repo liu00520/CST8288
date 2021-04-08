@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.function.ObjIntConsumer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +26,7 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
     public static final String ESTABLISHED = "established";
     public static final String NAME = "name";
     public static final String EMPLOYEE_COUNT = "employee_count";
-    public static final String ID = "id";
+    public static final String ID = "bankId";
     
     
     //constructor
@@ -55,8 +56,8 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
         return get( () -> dal().findByEstablished( established ) );
     }
     
-    public BloodBank getBloodBanksWithOwner (int ownerid){
-        return get( () -> dal().findByOwner( ownerid ) );
+    public BloodBank getBloodBanksWithOwner (int ownerId){
+        return get( () -> dal().findByOwnerID( ownerId ) );
     }
     
     public List<BloodBank> getBloodBanksWithEmplyeeCount (int count){
@@ -95,13 +96,15 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
             name = parameterMap.get( NAME )[ 0 ];
             validator.accept( name, 45 );
         }
-        String ownerid = parameterMap.get( OWNER_ID )[ 0 ];
         String privatelyOwned = parameterMap.get( PRIVATELY_OWNED )[ 0 ];
-        String established = parameterMap.get( ESTABLISHED )[ 0 ];
+        
+        String established= parameterMap.get(ESTABLISHED)[0].replace("T", " ");
+        
+        Date dateOfEstab = this.convertStringToDate(established);
+      
         String employeeCount = parameterMap.get( EMPLOYEE_COUNT )[ 0 ];
         name = parameterMap.get( NAME )[ 0 ];
         String id = parameterMap.get( ID )[ 0 ];
-
 
         //validate the data
         validator.accept( name, 45 );
@@ -110,9 +113,9 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
         validator.accept( employeeCount, 45 );
         validator.accept( id, 45 );
    
-        
-        
         //set values on entity
+        
+        entity.setEstablished(dateOfEstab);
         entity.setName( name );
         entity.setPrivatelyOwned( Boolean.parseBoolean(privatelyOwned) );
         entity.setEmplyeeCount(Integer.parseInt(employeeCount));
@@ -132,7 +135,7 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
     }
     @Override
     public List<String> getColumnNames() {
-        return Arrays.asList( "ID", "Name", "Owner ID", "Privately Owned", "Established", "Employee Count" );
+        return Arrays.asList( "BankID", "Name", "Owner ID", "Privately Owned", "Established", "Employee Count" );
     }
     
    @Override
