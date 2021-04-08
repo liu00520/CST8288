@@ -291,10 +291,10 @@ class BloodDonationTest {
 
         sampleMap = new HashMap<>();
         sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
-        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 45 ) } );
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 100 ) } );
         //sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 8 ) } );
         sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
-        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 45 ) } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 100 ) } );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"3456-02-24 21:45:45"});
 
         //idealy every test should be in its own method
