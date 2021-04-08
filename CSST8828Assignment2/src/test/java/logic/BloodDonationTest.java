@@ -117,13 +117,18 @@ class BloodDonationTest {
         assertEquals( originalSize - 1, list.size() );
     }
     
+    private void assertBloodDonationEquals( BloodDonation expected, BloodDonation actual ) {
+        //assert all fields to make sure they are the same
+        assertBloodDonationEquals(expected, actual, true);
+    }
+    
     /**
      * helper method for testing all account fields
      *
      * @param expected
      * @param actual
      */
-    private void assertBloodDonationEquals( BloodDonation expected, BloodDonation actual ) {
+    private void assertBloodDonationEquals( BloodDonation expected, BloodDonation actual , boolean testDepend ) {
         //assert all field to guarantee they are the same
         assertEquals( expected.getId(), actual.getId() );
         assertEquals( expected.getMilliliters(), actual.getMilliliters() );
@@ -143,75 +148,75 @@ class BloodDonationTest {
         assertBloodDonationEquals( expectedEntity, returnedDonation );
     }
     
-//    @Test
-//    final void testGetBloodDonationWithBloodGroup() {
-//        List<BloodDonation> returnedDonations = logic.getBloodDonationWithBloodGroup(expectedEntity.getBloodGroup());
-//        
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//        for (BloodDonation donation: returnedDonations) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getBloodBank(), donation.getBloodBank());
-//        }
-//    }
-//    
-//    @Test
-//    final void testGetBloodDonationWithMilliliters() {
-//        List<BloodDonation> returnedDonations = logic.getBloodDonationWithMilliliters(expectedEntity.getMilliliters());
-//        
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//        for (BloodDonation donation: returnedDonations) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getMilliliters(), donation.getMilliliters());
-//        }
-//    }
-//    
-//    @Test
-//    final void testGetBloodDonationWithRhd() {
-//        List<BloodDonation> returnedDonations = logic.getBloodDonationWithRhd(expectedEntity.getRhd());
-//        
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//        for (BloodDonation donation: returnedDonations) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getRhd(), donation.getRhd());
-//        }
-//    }
-//    
-//    @Test
-//    final void testGetBloodDonationWithCreated() {
-//        List<BloodDonation> returnedDonations = logic.getBloodDonationWithCreated(expectedEntity.getCreated());
-//        
-//        //the two accounts (testAcounts and returnedAccounts) must be the same
-//        for (BloodDonation donation: returnedDonations) {
-//            //all accounts must have the same password
-//            assertEquals( expectedEntity.getCreated(), donation.getCreated());
-//        }
-//    }
-//    
-//    @Test
-//    final void testCreateEntityAndAdd() {
-//        Map<String, String[]> sampleMap = new HashMap<>();
-//        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ "Test Create Entity" } );
-//        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ "testCreateAccount" } );
-//        //sampleMap.put( BloodDonationLogic.BANK_ID, new String[]{ "create" } );
-//        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "create" } );
-//        sampleMap.put( BloodDonationLogic.CREATED, new String[]{ "create" } );
-//        sampleMap.put( BloodDonationLogic.ID, new String[]{ "create" } );
-//
-//        BloodDonation returnedDonation = logic.createEntity( sampleMap );
-//        logic.add( returnedDonation );
-//
-//        returnedDonation = logic.getWithId(returnedDonation.getId());
-//
-//        //assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_BANK )[ 0 ], returnedDonation.() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], returnedDonation.getBloodGroup() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[ 0 ], returnedDonation.getCreated() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[ 0 ], returnedDonation.getMilliliters() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], returnedDonation.getRhd());
-//        //assertEquals( sampleMap.get( BloodDonationLogic.ID )[ 0 ], returnedDonation.getId() );
-//
-//        logic.delete( returnedDonation );
-//    }
-//    
+    @Test
+    final void testGetBloodDonationWithBloodGroup() {
+        List<BloodDonation> returnedDonations = logic.getBloodDonationWithBloodGroup(expectedEntity.getBloodGroup());
+        
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+        for (BloodDonation donation: returnedDonations) {
+            //all accounts must have the same password
+            assertEquals( expectedEntity.getBloodBank(), donation.getBloodBank());
+        }
+    }
+    
+    @Test
+    final void testGetBloodDonationWithMilliliters() {
+        List<BloodDonation> returnedDonations = logic.getBloodDonationWithMilliliters(expectedEntity.getMilliliters());
+        
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+        for (BloodDonation donation: returnedDonations) {
+            //all accounts must have the same password
+            assertEquals( expectedEntity.getMilliliters(), donation.getMilliliters());
+        }
+    }
+    
+    @Test
+    final void testGetBloodDonationWithRhd() {
+        List<BloodDonation> returnedDonations = logic.getBloodDonationWithRhd(expectedEntity.getRhd());
+        
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+        for (BloodDonation donation: returnedDonations) {
+            //all accounts must have the same password
+            assertEquals( expectedEntity.getRhd(), donation.getRhd());
+        }
+    }
+    
+    @Test
+    final void testGetBloodDonationWithCreated() {
+        List<BloodDonation> returnedDonations = logic.getBloodDonationWithCreated(expectedEntity.getCreated());
+        
+        //the two accounts (testAcounts and returnedAccounts) must be the same
+        for (BloodDonation donation: returnedDonations) {
+            //all accounts must have the same password
+            assertEquals( expectedEntity.getCreated(), donation.getCreated());
+        }
+    }
+    
+    @Test
+    final void testCreateEntityAndAdd() {
+        Map<String, String[]> sampleMap = new HashMap<>();
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ "Test Create Entity" } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ "testCreateAccount" } );
+        //sampleMap.put( BloodDonationLogic.BANK_ID, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.CREATED, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.ID, new String[]{ "create" } );
+
+        BloodDonation returnedDonation = logic.createEntity( sampleMap );
+        logic.add( returnedDonation );
+
+        returnedDonation = logic.getWithId(returnedDonation.getId());
+
+        //assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_BANK )[ 0 ], returnedDonation.() );
+        assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], returnedDonation.getBloodGroup() );
+        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[ 0 ], returnedDonation.getCreated() );
+        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[ 0 ], returnedDonation.getMilliliters() );
+        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], returnedDonation.getRhd());
+        //assertEquals( sampleMap.get( BloodDonationLogic.ID )[ 0 ], returnedDonation.getId() );
+
+        logic.delete( returnedDonation );
+    }
+    
      @Test
     final void testCreateEntity() {
         Map<String, String[]> testMap = new HashMap<>();
@@ -225,110 +230,110 @@ class BloodDonationTest {
         BloodDonation returnedDonation= logic.createEntity( testMap );
         assertBloodDonationEquals(expectedEntity,returnedDonation);
     }
-//    
-//    @Test
-//    final void testCreateEntityNullAndEmpty() {
-//        Map<String, String[]> testMap = new HashMap<>();
-//        Consumer<Map<String, String[]>>fillMap = (Map<String,String[]>map) -> {
-//            
-//            map.clear();
-//            testMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString(expectedEntity.getId() ) } );       
-//            testMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf(expectedEntity.getBloodGroup()) } );      
-//            testMap.put( BloodDonationLogic.CREATED, new String[]{logic.convertDateToString(expectedEntity.getCreated())});
-//            testMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString(expectedEntity.getMilliliters() ) } );     
-//            testMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf(expectedEntity.getRhd())} );
-//        };
-//        fillMap.accept(testMap);
-//        testMap.replace(BloodDonationLogic.ID, null);
-//        assertThrows(NullPointerException.class, () -> logic.createEntity(testMap));
-//        testMap.replace(BloodDonationLogic.ID, new String[]{});
-//        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
-//        
-//        testMap.replace(BloodDonationLogic.BLOOD_GROUP, null);
-//        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
-// 
-//        testMap.replace(BloodDonationLogic.MILLILITERS, null);
-//        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
-//        
-//        testMap.replace(BloodDonationLogic.RHESUS_FACTOR, null);
-//        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
-//        
-//        testMap.replace(BloodDonationLogic.CREATED, null);
-//        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
-//        
-//    }
-//    
-//    @Test
-//    final void testCreateEntityEdgeValues() {
-//        IntFunction<String> generateString = ( int length ) -> {
-//          
-//            return new Random().ints( 'a', 'z' + 1 ).limit( length )
-//                    .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append )
-//                    .toString();
-//        };
-//
-//        Map<String, String[]> sampleMap = new HashMap<>();
-//        sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
-//        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 1 ) } );
-//        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 1 ) } );
-//        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 1 ) } );
-//        sampleMap.put( BloodDonationLogic.CREATED, new String[]{"0001-01-01 01:00:00"});
-//
-//        //idealy every test should be in its own method
-//        BloodDonation returnedDonation = logic.createEntity( sampleMap );
-//        assertEquals(Integer.parseInt(sampleMap.get(BloodDonationLogic .ID)[0]), returnedDonation.getId());
-//        assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
-//        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
-//
-//        sampleMap = new HashMap<>();
-//        sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
-//        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 45 ) } );
-//        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 8 ) } );
-//        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 45 ) } );
-//        sampleMap.put( BloodDonationLogic.CREATED, new String[]{"3456-02-24 21:45:45"});
-//
-//        //idealy every test should be in its own method
-//        returnedDonation = logic.createEntity( sampleMap );
-//        assertEquals( Integer.parseInt( sampleMap.get( BloodDonationLogic.ID )[ 0 ] ), returnedDonation.getId() );
-//        assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
-//        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
-//        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
-//
-//    }
-//    
-//    
-//    @Test
-//    final void testGetColumnNames() {
-//        List<String> list = logic.getColumnNames();
-//        assertEquals( Arrays.asList("ID", "Milliliters", "Blood Group", "Rhesus Factor", "Bank ID", "Created"), list);
-//    }
-//
-//    @Test
-//    final void testGetColumnCodes() {
-//        List<String> list = logic.getColumnCodes();
-//        assertEquals( Arrays.asList( BloodDonationLogic.ID, BloodDonationLogic.MILLILITERS, BloodDonationLogic.BLOOD_GROUP,
-//                BloodDonationLogic.RHESUS_FACTOR, BloodDonationLogic.BANK_ID, 
-//                BloodDonationLogic.CREATED ), list );
-//    }
-//
-//    @Test
-//    final void testExtractDataAsList() {
-//        List<?> list = logic.extractDataAsList( expectedEntity );
-//        assertEquals( expectedEntity.getId(), list.get( 0 ) );
-//        assertEquals( expectedEntity.getMilliliters(), list.get( 1 ) );
-//        assertEquals( expectedEntity.getBloodGroup(), list.get( 2 ) );
-//        assertEquals( expectedEntity.getRhd(), list.get( 3 ) );
-//        assertEquals( expectedEntity.getCreated(), list.get( 4 ) );
-//    }
-//    
-//    @Test
-//    final void testExtractDataAsListInvalid() {
-//        List<?> list = logic.extractDataAsList(expectedEntity);
-//        assertThrows(IndexOutOfBoundsException.class, () -> list.get(5));
-//    }
+    
+    @Test
+    final void testCreateEntityNullAndEmpty() {
+        Map<String, String[]> testMap = new HashMap<>();
+        Consumer<Map<String, String[]>>fillMap = (Map<String,String[]>map) -> {
+            
+            map.clear();
+            testMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString(expectedEntity.getId() ) } );       
+            testMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf(expectedEntity.getBloodGroup()) } );      
+            testMap.put( BloodDonationLogic.CREATED, new String[]{logic.convertDateToString(expectedEntity.getCreated())});
+            testMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString(expectedEntity.getMilliliters() ) } );     
+            testMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf(expectedEntity.getRhd())} );
+        };
+        fillMap.accept(testMap);
+        testMap.replace(BloodDonationLogic.ID, null);
+        assertThrows(NullPointerException.class, () -> logic.createEntity(testMap));
+        testMap.replace(BloodDonationLogic.ID, new String[]{});
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(BloodDonationLogic.BLOOD_GROUP, null);
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
+ 
+        testMap.replace(BloodDonationLogic.MILLILITERS, null);
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(BloodDonationLogic.RHESUS_FACTOR, null);
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(BloodDonationLogic.CREATED, null);
+        assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
+        
+    }
+    
+    @Test
+    final void testCreateEntityEdgeValues() {
+        IntFunction<String> generateString = ( int length ) -> {
+          
+            return new Random().ints( 'a', 'z' + 1 ).limit( length )
+                    .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append )
+                    .toString();
+        };
+
+        Map<String, String[]> sampleMap = new HashMap<>();
+        sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 1 ) } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 1 ) } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 1 ) } );
+        sampleMap.put( BloodDonationLogic.CREATED, new String[]{"0001-01-01 01:00:00"});
+
+        //idealy every test should be in its own method
+        BloodDonation returnedDonation = logic.createEntity( sampleMap );
+        assertEquals(Integer.parseInt(sampleMap.get(BloodDonationLogic .ID)[0]), returnedDonation.getId());
+        assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
+        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
+        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
+        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
+
+        sampleMap = new HashMap<>();
+        sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 45 ) } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 8 ) } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 45 ) } );
+        sampleMap.put( BloodDonationLogic.CREATED, new String[]{"3456-02-24 21:45:45"});
+
+        //idealy every test should be in its own method
+        returnedDonation = logic.createEntity( sampleMap );
+        assertEquals( Integer.parseInt( sampleMap.get( BloodDonationLogic.ID )[ 0 ] ), returnedDonation.getId() );
+        assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
+        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
+        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
+        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
+
+    }
+    
+    
+    @Test
+    final void testGetColumnNames() {
+        List<String> list = logic.getColumnNames();
+        assertEquals( Arrays.asList("ID", "Milliliters", "Blood Group", "Rhesus Factor", "Bank ID", "Created"), list);
+    }
+
+    @Test
+    final void testGetColumnCodes() {
+        List<String> list = logic.getColumnCodes();
+        assertEquals( Arrays.asList( BloodDonationLogic.ID, BloodDonationLogic.MILLILITERS, BloodDonationLogic.BLOOD_GROUP,
+                BloodDonationLogic.RHESUS_FACTOR, BloodDonationLogic.BANK_ID, 
+                BloodDonationLogic.CREATED ), list );
+    }
+
+    @Test
+    final void testExtractDataAsList() {
+        List<?> list = logic.extractDataAsList( expectedEntity );
+        assertEquals( expectedEntity.getId(), list.get( 0 ) );
+        assertEquals( expectedEntity.getMilliliters(), list.get( 1 ) );
+        assertEquals( expectedEntity.getBloodGroup(), list.get( 2 ) );
+        assertEquals( expectedEntity.getRhd(), list.get( 3 ) );
+        assertEquals( expectedEntity.getCreated(), list.get( 4 ) );
+    }
+    
+    @Test
+    final void testExtractDataAsListInvalid() {
+        List<?> list = logic.extractDataAsList(expectedEntity);
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(5));
+    }
 
     
 }

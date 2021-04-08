@@ -139,7 +139,7 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
 
     @Override
     public List<String> getColumnCodes() {
-        return Arrays.asList (BANK_ID, MILLILITERS, BLOOD_GROUP, RHESUS_FACTOR, CREATED, ID); 
+        return Arrays.asList(ID, MILLILITERS, BLOOD_GROUP, RHESUS_FACTOR, BANK_ID, CREATED);
     }
 
     @Override
