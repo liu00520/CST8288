@@ -326,7 +326,8 @@ class BloodDonationTest {
         assertEquals( expectedEntity.getMilliliters(), list.get( 1 ) );
         assertEquals( expectedEntity.getBloodGroup(), list.get( 2 ) );
         assertEquals( expectedEntity.getRhd(), list.get( 3 ) );
-        assertEquals( expectedEntity.getCreated(), list.get( 4 ) );
+        assertEquals( expectedEntity.getBloodBank(), list.get( 4));
+        assertEquals( expectedEntity.getCreated(), list.get( 5 ) );
     }
     
     @Test
