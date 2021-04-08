@@ -214,16 +214,16 @@ class BloodDonationTest {
 //    
      @Test
     final void testCreateEntity() {
-        Map<String, String[]> sampleMap = new HashMap<>();
-        assertEquals( sampleMap.get( BloodDonationLogic.ID )[ 0 ], expectedEntity.getId() );
-        assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], expectedEntity.getBloodGroup() );
-        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[ 0 ], expectedEntity.getCreated() );
-        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[ 0 ], expectedEntity.getMilliliters() );
-        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], expectedEntity.getRhd());
-
-        BloodDonation returnedDonation = logic.createEntity( sampleMap );
-
-        assertBloodDonationEquals( expectedEntity, returnedDonation );
+        Map<String, String[]> testMap = new HashMap<>();
+        testMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString(expectedEntity.getId() ) } );       
+        testMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf(expectedEntity.getBloodGroup()) } );      
+        testMap.put( BloodDonationLogic.CREATED, new String[]{logic.convertDateToString(expectedEntity.getCreated())});
+        testMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString(expectedEntity.getMilliliters() ) } );     
+        testMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf(expectedEntity.getRhd())} );
+        
+        
+        BloodDonation returnedDonation= logic.createEntity( testMap );
+        assertBloodDonationEquals(expectedEntity,returnedDonation);
     }
 //    
 //    @Test
