@@ -131,6 +131,9 @@ class BloodDonationTest {
     private void assertBloodDonationEquals( BloodDonation expected, BloodDonation actual , boolean testDepend ) {
         //assert all field to guarantee they are the same
         assertEquals( expected.getId(), actual.getId() );
+        if (testDepend) {
+            assertEquals( expected.getBloodBank().getId(), actual.getBloodBank().getId() );
+        }
         assertEquals( expected.getMilliliters(), actual.getMilliliters() );
         assertEquals( expected.getBloodGroup(), actual.getBloodGroup() );
         assertEquals( expected.getRhd(), actual.getRhd() );
