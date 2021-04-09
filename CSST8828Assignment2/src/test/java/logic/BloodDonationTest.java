@@ -2,6 +2,7 @@ package logic;
 
 import common.EMFactory;
 import common.TomcatStartUp;
+import common.ValidationException;
 import entity.BloodBank;
 import entity.BloodDonation;
 import entity.BloodGroup;
@@ -207,6 +208,7 @@ class BloodDonationTest {
         sampleMap.put( BloodDonationLogic.ID, new String[]{ "2" } );
 
         BloodDonation returnedDonation = logic.createEntity( sampleMap );
+        
         logic.add( returnedDonation );
 
         returnedDonation = logic.getWithId(returnedDonation.getId());
@@ -266,6 +268,48 @@ class BloodDonationTest {
         testMap.replace(BloodDonationLogic.CREATED, null);
         assertThrows(IndexOutOfBoundsException.class, () -> logic.createEntity(testMap));
         
+    }
+    
+    @Test
+    final void testCreateEntityBadLengthValues() {
+        Map<String, String[]> testMap = new HashMap<>();
+        Consumer<Map<String, String[]>> fillMap = ( Map<String, String[]> map ) -> {
+             map.clear();
+            map.put( BloodDonationLogic.ID, new String[]{ Integer.toString( expectedEntity.getId() ) } );
+            map.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf(expectedEntity.getBloodGroup()) } );
+            testMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString(expectedEntity.getMilliliters() ) } );  
+            testMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf(expectedEntity.getRhd())} );
+            testMap.put( BloodDonationLogic.CREATED, new String[]{logic.convertDateToString(expectedEntity.getCreated())});
+        };
+
+        IntFunction<String> generateString = ( int length ) -> {
+            return new Random().ints( 'a', 'z' + 1 ).limit( length )
+                    .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append ).toString();
+        };
+
+//        //idealy every test should be in its own method
+        fillMap.accept( testMap );
+        
+        testMap.replace( BloodDonationLogic.ID, new String[]{ "" } );
+        assertThrows( ValidationException.class, () -> logic.createEntity( testMap ) );
+        testMap.replace( BloodDonationLogic.ID, new String[]{ "12b" } );
+        assertThrows( ValidationException.class, () -> logic.createEntity( testMap ) );
+        
+        testMap.replace(BloodDonationLogic.BLOOD_GROUP, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap);
+        testMap.replace(BloodDonationLogic.MILLILITERS, new String[]{generateString.apply(101)});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        
+        testMap.replace(BloodDonationLogic.RHESUS_FACTOR, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap); 
+   
+        testMap.replace(BloodDonationLogic.CREATED, new String[]{""});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
+        fillMap.accept(testMap);
+        testMap.replace(BloodDonationLogic.CREATED, new String[]{"2020-10-10T10:10"});
+        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
     }
     
     @Test
