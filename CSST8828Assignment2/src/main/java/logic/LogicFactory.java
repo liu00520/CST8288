@@ -12,6 +12,7 @@ public abstract class LogicFactory {
     }
 
 
+
     public static < T> T getFor(String entityName) {
 
         try {
