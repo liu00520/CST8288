@@ -198,13 +198,13 @@ class BloodDonationTest {
     @Test
     final void testCreateEntityAndAdd() {
         Map<String, String[]> sampleMap = new HashMap<>();
-        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ "Test Create Entity" } );
-        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ "testCreateAccount" } );
-        sampleMap.put( BloodDonationLogic.BANK_ID, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ "AB" } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ "4" } );
+        sampleMap.put( BloodDonationLogic.BANK_ID, new String[]{ "3" } );
         sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
         //sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "create" } );
-        sampleMap.put( BloodDonationLogic.CREATED, new String[]{ "create" } );
-        sampleMap.put( BloodDonationLogic.ID, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.CREATED, new String[]{ "1900-11-11 11:11:11.0" } );
+        sampleMap.put( BloodDonationLogic.ID, new String[]{ "2" } );
 
         BloodDonation returnedDonation = logic.createEntity( sampleMap );
         logic.add( returnedDonation );
