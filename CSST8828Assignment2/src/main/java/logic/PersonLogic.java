@@ -11,8 +11,9 @@ import java.util.Objects;
 import java.util.function.ObjIntConsumer;
 
 /**
- *
- * @author markg
+ * @author Mark Newport
+ * Logic class for Person; Contains the static Strings for the columns; Most
+ * Most methods delegate to PersonDAL
  */
 public class PersonLogic extends GenericLogic<Person, PersonDAL> {
 
@@ -35,7 +36,6 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
     @Override
     public Person getWithId(int id) {
         return get(() -> dal().findById(id));
-
     }
 
     public List<Person> getPersonWithPhone(String phone) {
@@ -57,6 +57,14 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
     public List<Person> getPersonWithBirth(Date birth) {
         return get(() -> dal().findByBirth(birth));
     }
+    
+    /**
+     * Created this method for the search function in JSP
+     */
+    @Override
+    public List<Person> search(String search) {
+        return get(() -> dal().findContaining(search));
+    }
 
     @Override
     public Person createEntity(Map<String, String[]> parameterMap) {
@@ -73,6 +81,7 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
                 throw new ValidationException(ex);
             }
         }
+        //lambda to check the values in the map to validate Strings
         ObjIntConsumer<String> validator = (value, length) -> {
 
             if (value == null || value.trim().isEmpty() || value.length() > length) {
@@ -86,18 +95,21 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
                 throw new ValidationException(error);
             }
         };
-        
-        Date birthDate = this.convertStringToDate(parameterMap.get(BIRTH)[0]);
+        //getting and storing the static class variables. Replacing the "T" in date & using
+        //the String->date conversion method
+        Date birthDate = this.convertStringToDate(parameterMap.get(BIRTH)[0].replace("T", " "));
         String firstName = parameterMap.get(FIRST_NAME)[0];
         String lastName = parameterMap.get(LAST_NAME)[0];
         String phone = parameterMap.get(PHONE)[0];
         String address = parameterMap.get(ADDRESS)[0];
         
+        //using validator to confirm values are good (except date which we use the conversion)
         validator.accept(firstName, 50);
         validator.accept(lastName, 50);
         validator.accept(phone, 15);
         validator.accept(address, 100);
         
+        //Setting the values for the Person & returning
         entity.setBirth(birthDate);
         entity.setFirstName(firstName);
         entity.setLastName(lastName);

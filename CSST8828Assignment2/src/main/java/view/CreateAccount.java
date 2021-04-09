@@ -129,6 +129,7 @@ public class CreateAccount extends HttpServlet {
         if( aLogic.getAccountWithUsername( username ) == null ){
             try {
                 Account account = aLogic.createEntity( request.getParameterMap() );
+                
                 aLogic.add( account );
             } catch( Exception ex ) {
                 errorMessage = ex.getMessage();

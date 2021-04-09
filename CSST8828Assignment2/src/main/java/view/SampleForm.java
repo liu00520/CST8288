@@ -103,7 +103,6 @@ public class SampleForm extends HttpServlet {
         log( "GET" );
         processRequest( request, response );
     }
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
