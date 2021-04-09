@@ -103,7 +103,7 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         //String rhesusFactor = parameterMap.get(RHESUS_FACTOR) [ 0 ];
         //extracting date from map
         String date = parameterMap.get(CREATED) [ 0 ];
-        String id = parameterMap.get( BANK_ID )[ 0 ];
+        String id = parameterMap.get( ID )[ 0 ];
         
         //called method on RhesusFactorConverter to convert from string to rhesus
         RhesusFactor rhesusFactor = this.convertToEntityAttribute(parameterMap.get(RHESUS_FACTOR)[0]);
