@@ -78,7 +78,9 @@ class DonationRecordTest {
 
         //create person for dependancy 
 //        person= em.find(Person.class,1);
+
         TypedQuery<Person> tq = em.createQuery("select p from Person p", Person.class);
+
         List<Person> list = tq.getResultList();
         if (list.isEmpty()) {
             person = new Person();
@@ -234,9 +236,24 @@ class DonationRecordTest {
         sampleMap.put(DonationRecordLogic.PERSON_ID, new String[]{"2"});
         sampleMap.put(DonationRecordLogic.DONATION_ID, new String[]{"6"});
 
+     
+      PersonLogic personLogic = LogicFactory.getFor("Person");
+
+        
+        DonationRecord returnedRecord = logic.createEntity(sampleMap);
+        //call the person logic, get the person with specific id then add it to record
+   //    int PERSON_ID1 = Integer.valueOf(DonationRecordLogic.PERSON_ID);
+      //  logic.findByPerson(PERSON_ID1);
+      // Person c = personLogic.getWithId(PERSON_ID1);
+        //add the depedencies
+      //  returnedRecord.setPerson(c);
+        logic.add(returnedRecord);
+
+
         DonationRecord returnedRecord = logic.createEntity(sampleMap);
 
         logic.add(returnedRecord);
+
 
         returnedRecord = logic.getWithId(returnedRecord.getId());
 
@@ -244,8 +261,13 @@ class DonationRecordTest {
         assertEquals(sampleMap.get(DonationRecordLogic.HOSPITAL)[0], returnedRecord.getHospital());
         assertEquals(sampleMap.get(DonationRecordLogic.CREATED)[0], returnedRecord.getCreated().toString());
         assertEquals(sampleMap.get(DonationRecordLogic.TESTED)[0], String.valueOf(returnedRecord.getTested()));
+
+     //   assertEquals(sampleMap.get(DonationRecordLogic.PERSON_ID)[0],returnedRecord.getPerson().getId());
+        //assertEquals(sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
+
         // assertEquals( sampleMap.get( DonationRecordLogic.PERSON_ID )[ 0 ], returnedRecord.getPerson().getId());
         //  assertEquals( sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
+
 
         logic.delete(returnedRecord);
     }
@@ -410,4 +432,26 @@ class DonationRecordTest {
         List<?> list = logic.extractDataAsList(donationRecordExpected);
         assertThrows(IndexOutOfBoundsException.class, () -> list.get(7));
     }
+
+
+    @Test
+    final void testSearch() {
+        int foundFull = 0;
+        //search for a substring of one of the fields in the expectedAccount
+        String searchString = donationRecordExpected.getHospital().substring(3);
+        //in account we only search for display name and user, this is completely based on your design for other entities.
+        List<DonationRecord> returnedRecords = logic.search(searchString);
+        for (DonationRecord record : returnedRecords) {
+            //all accounts must contain the substring
+            assertTrue(record.getHospital().contains(searchString) || record.getAdministrator().contains(searchString));
+            //exactly one account must be the same
+            if (record.getId().equals(donationRecordExpected.getId())) {
+                assertDonRecordEquals(donationRecordExpected, record, false);
+                foundFull++;
+            }
+        }
+        assertEquals(1, foundFull, "if zero means not found, if more than one means duplicate");
+    }
+
+
 }
