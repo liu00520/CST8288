@@ -102,7 +102,7 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         String bloodGroup = parameterMap.get(BLOOD_GROUP)[ 0 ];
         //extracting date from map
         String date = parameterMap.get(CREATED) [ 0 ];
-        String id = parameterMap.get( ID )[ 0 ];
+//        String id = parameterMap.get( ID )[ 0 ];
         
         //called method on RhesusFactorConverter to convert from string to rhesus
         RhesusFactor rhesusFactor = this.convertToEntityAttribute(parameterMap.get(RHESUS_FACTOR)[0]);
@@ -112,8 +112,8 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         
         
         //validating the data
-        validator.accept(milliliters, 100);
-        validator.accept(id, 45);
+//        validator.accept(milliliters, 100);
+//        validator.accept(id, 45);
         
         
         //converting date to appropriate format
@@ -124,7 +124,7 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         //setting the values on the entity
         entity.setMilliliters(Integer.parseInt(milliliters));
         entity.setRhd(rhesusFactor); 
-        entity.setId(Integer.parseInt(id));
+//        entity.setId(Integer.parseInt(id));
         entity.setBloodGroup(group);
         
           
