@@ -69,6 +69,13 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
            return get( () -> dal().findByCreated(created));
        }
        
+    /**
+     * method for search function in JSP
+     */
+    @Override
+    public List<DonationRecord> search(String search) {
+        return get(() -> dal().findContaining(search));
+    }
        
          @Override
     public DonationRecord createEntity( Map<String, String[] > parameterMap ) {

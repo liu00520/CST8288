@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
  * @author Mark Newport
  * Testing each PersonLogic method for the different cases
  */
-@Disabled
+//@Disabled
 public class PersonLogicTest {
     
     private PersonLogic logic;
