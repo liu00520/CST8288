@@ -209,7 +209,7 @@ class BloodDonationTest {
         returnedDonation = logic.getWithId(returnedDonation.getId());
 
         assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], returnedDonation.getBloodGroup().name() );
-        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[ 0 ], returnedDonation.getCreated().toString() ); //us ethe method convertDateToString from logic
+        assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[ 0 ], returnedDonation.getCreated().toString() ); //use the method convertDateToString from logic
         assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[ 0 ], String.valueOf(returnedDonation.getMilliliters() ));
         assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], returnedDonation.getRhd().name());
       
@@ -310,24 +310,32 @@ class BloodDonationTest {
 
         Map<String, String[]> sampleMap = new HashMap<>();
         sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
-        //sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 1 ) } ); 
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf("AB") } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString( 1 ) } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf("Positive")} );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"0001-01-01 01:00:00"});
 
         //ideally every test should be in its own method
         BloodDonation returnedDonation = logic.createEntity( sampleMap );
         assertEquals(Integer.parseInt(sampleMap.get(BloodDonationLogic .ID)[0]), returnedDonation.getId());
-        //assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
+        assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], returnedDonation.getBloodGroup().name() );
+        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0],  String.valueOf(returnedDonation.getMilliliters() ));
+        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], returnedDonation.getRhd().name());
         assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0],logic.convertDateToString(returnedDonation.getCreated()));
 
         sampleMap = new HashMap<>();
         sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
-        //sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 100 ) } );
+        sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf("A") } );
+        sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString( 1 ) } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{String.valueOf("Positive")} );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"3456-02-24 21:45:45"});
 
         //idealy every test should be in its own method
         returnedDonation = logic.createEntity( sampleMap );
         assertEquals( Integer.parseInt( sampleMap.get( BloodDonationLogic.ID )[ 0 ] ), returnedDonation.getId() );
-        //assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
+        assertEquals( sampleMap.get( BloodDonationLogic.BLOOD_GROUP )[ 0 ], returnedDonation.getBloodGroup().name() );
+        assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0],  String.valueOf(returnedDonation.getMilliliters() ));
+        assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[ 0 ], returnedDonation.getRhd().name());
         assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0],logic.convertDateToString(returnedDonation.getCreated()));
 
     }
