@@ -23,6 +23,7 @@ import logic.PersonLogic;
  *
  * @author sarah
  */
+
 @WebServlet(name = "CreateDonationRecord", urlPatterns = {"/CreateDonationRecord"})
 public class CreateDonationRecord extends HttpServlet {
 
@@ -175,6 +176,6 @@ public class CreateDonationRecord extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Donation Record Creattion";
-    }// </editor-fold>
+    }
 
 }

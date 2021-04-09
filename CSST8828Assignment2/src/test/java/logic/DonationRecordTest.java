@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author sarah
  */
-//@Disabled
+@Disabled
 class DonationRecordTest {
 
     private DonationRecordLogic logic;
@@ -94,9 +94,13 @@ class DonationRecordTest {
             person = list.get(0);
         }
 
+         TypedQuery<BloodDonation> t = em.createQuery("select p from BloodDonation p", BloodDonation.class);
+
+        List<BloodDonation> list1 = t.getResultList();
+        if (list.isEmpty()) {
         //create BloodDonation for dependancy 
-        blDon = em.find(BloodDonation.class, 1);
-        if (blDon == null) {
+        //blDon = em.find(BloodDonation.class, 1);
+       // if (blDon == null) {
             blDon = new BloodDonation();
             blDon.setMilliliters(5);
             blDon.setBloodGroup(BloodGroup.B);
@@ -104,6 +108,9 @@ class DonationRecordTest {
             blDon.setCreated(logic.convertStringToDate("2001-12-15 09:05:20"));
 
             em.persist(blDon);
+        }
+          else {
+            blDon = list1.get(0);
         }
 
         DonationRecord entity = new DonationRecord();
@@ -247,10 +254,10 @@ class DonationRecordTest {
       // Person c = personLogic.getWithId(PERSON_ID1);
         //add the depedencies
       //  returnedRecord.setPerson(c);
-        logic.add(returnedRecord);
+      //  logic.add(returnedRecord);
 
 
-        DonationRecord returnedRecord = logic.createEntity(sampleMap);
+        //DonationRecord returnedRecord = logic.createEntity(sampleMap);
 
         logic.add(returnedRecord);
 

@@ -116,6 +116,6 @@ public class DonationRecordTable extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Donation Record Creation";
-    }// </editor-fold>
+    }
 
 }
