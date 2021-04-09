@@ -287,7 +287,7 @@ class BloodDonationTest {
                     .collect( StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append ).toString();
         };
 
-//        //idealy every test should be in its own method
+        //idealy every test should be in its own method
         fillMap.accept( testMap );
         
         testMap.replace( BloodDonationLogic.ID, new String[]{ "" } );
@@ -295,16 +295,10 @@ class BloodDonationTest {
         testMap.replace( BloodDonationLogic.ID, new String[]{ "12b" } );
         assertThrows( ValidationException.class, () -> logic.createEntity( testMap ) );
         
-        testMap.replace(BloodDonationLogic.BLOOD_GROUP, new String[]{""});
-        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
-        fillMap.accept(testMap);
         testMap.replace(BloodDonationLogic.MILLILITERS, new String[]{generateString.apply(101)});
         assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
         
-        testMap.replace(BloodDonationLogic.RHESUS_FACTOR, new String[]{""});
-        assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
-        fillMap.accept(testMap); 
-   
+       
         testMap.replace(BloodDonationLogic.CREATED, new String[]{""});
         assertThrows(ValidationException.class, () -> logic.createEntity(testMap));
         fillMap.accept(testMap);
@@ -325,7 +319,6 @@ class BloodDonationTest {
         sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
         sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 1 ) } );
         sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 1 ) } );
-        //sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 1 ) } );
         sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"0001-01-01 01:00:00"});
 
@@ -333,7 +326,6 @@ class BloodDonationTest {
         BloodDonation returnedDonation = logic.createEntity( sampleMap );
         assertEquals(Integer.parseInt(sampleMap.get(BloodDonationLogic .ID)[0]), returnedDonation.getId());
         assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
-        //assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
         assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], String.valueOf(returnedDonation.getRhd() ));
         assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
         assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
@@ -341,7 +333,6 @@ class BloodDonationTest {
         sampleMap = new HashMap<>();
         sampleMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString( 1 ) } );
         sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ generateString.apply( 100 ) } );
-        //sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ generateString.apply( 8 ) } );
         sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
         sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ generateString.apply( 100 ) } );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{"3456-02-24 21:45:45"});
@@ -350,7 +341,6 @@ class BloodDonationTest {
         returnedDonation = logic.createEntity( sampleMap );
         assertEquals( Integer.parseInt( sampleMap.get( BloodDonationLogic.ID )[ 0 ] ), returnedDonation.getId() );
         assertEquals(sampleMap.get(BloodDonationLogic.BLOOD_GROUP)[0], returnedDonation.getBloodGroup());
-        //assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], returnedDonation.getRhd() );
         assertEquals( sampleMap.get( BloodDonationLogic.RHESUS_FACTOR )[0], String.valueOf(returnedDonation.getRhd() ));
         assertEquals( sampleMap.get( BloodDonationLogic.MILLILITERS )[0], returnedDonation.getMilliliters() );
         assertEquals( sampleMap.get( BloodDonationLogic.CREATED )[0], returnedDonation.getCreated() );
