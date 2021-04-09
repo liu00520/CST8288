@@ -1,7 +1,7 @@
 -- -----------------------------------------------------
 -- Schema simplebloodbank
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `simplebloodbank` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+CREATE SCHEMA IF NOT EXISTS `simplebloodbank` DEFAULT CHARACTER SET utf8mb4;
 USE `simplebloodbank` ;
 
 -- -----------------------------------------------------
@@ -15,11 +15,10 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`person` (
   `address` VARCHAR(100) NOT NULL,
   `birth` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 -- -----------------------------------------------------
@@ -33,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`blood_bank` (
   `established` DATETIME NOT NULL,
   `emplyee_count` INT NOT NULL,
   PRIMARY KEY (`bank_id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
-  UNIQUE INDEX `bank_id_UNIQUE` (`bank_id` ASC) VISIBLE,
-  INDEX `fk_blood_bank_person1_idx` (`owner` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  UNIQUE INDEX `bank_id_UNIQUE` (`bank_id` ASC) ,
+  INDEX `fk_blood_bank_person1_idx` (`owner` ASC) ,
   CONSTRAINT `fk_blood_bank_person1`
     FOREIGN KEY (`owner`)
     REFERENCES `simplebloodbank`.`person` (`id`)
@@ -43,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`blood_bank` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+;
 
 
 -- -----------------------------------------------------
@@ -57,14 +56,14 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`blood_donation` (
   `rhd` ENUM('+', '-') NOT NULL,
   `created` DATETIME NOT NULL,
   PRIMARY KEY (`donation_id`),
-  INDEX `fk_blood_donation_blood_bank1_idx` (`bank_id` ASC) VISIBLE,
-  UNIQUE INDEX `donation_id_UNIQUE` (`donation_id` ASC) VISIBLE,
+  INDEX `fk_blood_donation_blood_bank1_idx` (`bank_id` ASC) ,
+  UNIQUE INDEX `donation_id_UNIQUE` (`donation_id` ASC) ,
   CONSTRAINT `fk_blood_donation_blood_bank1`
     FOREIGN KEY (`bank_id`)
     REFERENCES `simplebloodbank`.`blood_bank` (`bank_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+;
 
 
 -- -----------------------------------------------------
@@ -79,9 +78,9 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`donation_record` (
   `hospital` VARCHAR(100) NOT NULL,
   `created` DATETIME NOT NULL,
   PRIMARY KEY (`record_id`),
-  UNIQUE INDEX `record_id_UNIQUE` (`record_id` ASC) VISIBLE,
-  INDEX `fk_donation_record_person1_idx` (`person_id` ASC) VISIBLE,
-  INDEX `fk_donation_record_blood_donation1_idx` (`donation_id` ASC) VISIBLE,
+  UNIQUE INDEX `record_id_UNIQUE` (`record_id` ASC) ,
+  INDEX `fk_donation_record_person1_idx` (`person_id` ASC) ,
+  INDEX `fk_donation_record_blood_donation1_idx` (`donation_id` ASC) ,
   CONSTRAINT `fk_donation_record_blood_donation1`
     FOREIGN KEY (`donation_id`)
     REFERENCES `simplebloodbank`.`blood_donation` (`donation_id`),
@@ -90,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`donation_record` (
     REFERENCES `simplebloodbank`.`person` (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+;
 
 
 -- -----------------------------------------------------
@@ -103,6 +102,6 @@ CREATE TABLE IF NOT EXISTS `simplebloodbank`.`account` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) ,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) )
 ENGINE = InnoDB;

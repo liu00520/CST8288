@@ -78,7 +78,9 @@ class DonationRecordTest {
 
         //create person for dependancy 
 //        person= em.find(Person.class,1);
-        TypedQuery<Person> tq = em.createQuery("Select p from Person p", Person.class);
+
+        TypedQuery<Person> tq = em.createQuery("select p from Person p", Person.class);
+
         List<Person> list = tq.getResultList();
         if (list.isEmpty()) {
             person = new Person();
@@ -247,14 +249,25 @@ class DonationRecordTest {
       //  returnedRecord.setPerson(c);
         logic.add(returnedRecord);
 
+
+        DonationRecord returnedRecord = logic.createEntity(sampleMap);
+
+        logic.add(returnedRecord);
+
+
         returnedRecord = logic.getWithId(returnedRecord.getId());
 
         assertEquals(sampleMap.get(DonationRecordLogic.ADMINSTRATOR)[0], returnedRecord.getAdministrator());
         assertEquals(sampleMap.get(DonationRecordLogic.HOSPITAL)[0], returnedRecord.getHospital());
         assertEquals(sampleMap.get(DonationRecordLogic.CREATED)[0], returnedRecord.getCreated().toString());
         assertEquals(sampleMap.get(DonationRecordLogic.TESTED)[0], String.valueOf(returnedRecord.getTested()));
+
      //   assertEquals(sampleMap.get(DonationRecordLogic.PERSON_ID)[0],returnedRecord.getPerson().getId());
         //assertEquals(sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
+
+        // assertEquals( sampleMap.get( DonationRecordLogic.PERSON_ID )[ 0 ], returnedRecord.getPerson().getId());
+        //  assertEquals( sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
+
 
         logic.delete(returnedRecord);
     }
@@ -420,6 +433,7 @@ class DonationRecordTest {
         assertThrows(IndexOutOfBoundsException.class, () -> list.get(7));
     }
 
+
     @Test
     final void testSearch() {
         int foundFull = 0;
@@ -438,5 +452,6 @@ class DonationRecordTest {
         }
         assertEquals(1, foundFull, "if zero means not found, if more than one means duplicate");
     }
+
 
 }

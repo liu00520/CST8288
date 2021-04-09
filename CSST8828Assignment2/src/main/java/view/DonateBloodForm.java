@@ -44,13 +44,17 @@ public class DonateBloodForm extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Donation Blood Form</title>");
+          
+            //use this to create a border & only 1 div wrapped for the input type
+            //Accepting and creating the person entity 
+
+            out.println("<title>Donation Blood Form</title>"); 
             out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/bloodform.css\">");
             out.println("</head>");
             out.println("<body>");
-            out.println("<form method=\"post\">");
-            //use this to create a border & only 1 div wrapped for the input type
-            //Accepting and creating the person entity 
+            out.println( "<form method=\"post\">" );
+            
+
             out.println("<div class=\"grid-container\">");
             out.println("<div class=\"item\"><h2>Person</h2></div>");
             out.println("<div class=\"item\">First Name</div>");
@@ -120,7 +124,7 @@ public class DonateBloodForm extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -149,7 +153,9 @@ public class DonateBloodForm extends HttpServlet {
             Person person = personLogic.createEntity(request.getParameterMap());
             personLogic.add(person);
 
-        } catch (Exception e) {
+      
+        } catch(Exception e) {
+
             message = e.getMessage();
         }
         if (request.getParameter("add") != null) {
