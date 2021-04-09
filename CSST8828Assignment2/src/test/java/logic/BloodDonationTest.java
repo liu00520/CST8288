@@ -201,7 +201,8 @@ class BloodDonationTest {
         sampleMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{ "Test Create Entity" } );
         sampleMap.put( BloodDonationLogic.MILLILITERS, new String[]{ "testCreateAccount" } );
         sampleMap.put( BloodDonationLogic.BANK_ID, new String[]{ "create" } );
-        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "create" } );
+        sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "Negative"} );
+        //sampleMap.put( BloodDonationLogic.RHESUS_FACTOR, new String[]{ "create" } );
         sampleMap.put( BloodDonationLogic.CREATED, new String[]{ "create" } );
         sampleMap.put( BloodDonationLogic.ID, new String[]{ "create" } );
 
