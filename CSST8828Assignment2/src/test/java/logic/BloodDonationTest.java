@@ -224,7 +224,8 @@ class BloodDonationTest {
      @Test
     final void testCreateEntity() {
         Map<String, String[]> testMap = new HashMap<>();
-        testMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString(expectedEntity.getId() ) } );       
+        testMap.put( BloodDonationLogic.ID, new String[]{ Integer.toString(expectedEntity.getId() ) } );
+        testMap.put( BloodDonationLogic.BANK_ID, new String[]{ String.valueOf(expectedEntity.getBloodBank() ) } );   
         testMap.put( BloodDonationLogic.BLOOD_GROUP, new String[]{String.valueOf(expectedEntity.getBloodGroup()) } );      
         testMap.put( BloodDonationLogic.CREATED, new String[]{logic.convertDateToString(expectedEntity.getCreated())});
         testMap.put( BloodDonationLogic.MILLILITERS, new String[]{ Integer.toString(expectedEntity.getMilliliters() ) } );     
