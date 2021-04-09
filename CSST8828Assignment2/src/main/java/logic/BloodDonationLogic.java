@@ -97,10 +97,9 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
 
 
         
-        //String bankId = parameterMap.get(BANK_ID) [ 0 ];
+        
         String milliliters = parameterMap.get(MILLILITERS) [ 0 ];
         String bloodGroup = parameterMap.get(BLOOD_GROUP)[ 0 ];
-        //String rhesusFactor = parameterMap.get(RHESUS_FACTOR) [ 0 ];
         //extracting date from map
         String date = parameterMap.get(CREATED) [ 0 ];
         String id = parameterMap.get( ID )[ 0 ];
@@ -114,22 +113,20 @@ public class BloodDonationLogic extends GenericLogic<BloodDonation, BloodDonatio
         
         //validating the data
         validator.accept(milliliters, 100);
-        //validator.accept(bloodGroup, 8);
-        //validator.accept(rhesusFactor, 2);
         validator.accept(id, 45);
-        //validator.accept(bankId, 100);
+        
         
         //converting date to appropriate format
         entity.setCreated(convertStringToDate(date));
         
-        //BloodGroup.valueOf(bloodGroup);
+       
                 
         //setting the values on the entity
         entity.setMilliliters(Integer.parseInt(milliliters));
         entity.setRhd(rhesusFactor); 
         entity.setId(Integer.parseInt(id));
         entity.setBloodGroup(group);
-        //entity.setBloodBank(Integer.parseInt(bankId));
+        
           
         return entity;
     }
