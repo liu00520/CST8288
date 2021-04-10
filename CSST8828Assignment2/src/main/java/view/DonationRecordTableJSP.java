@@ -20,6 +20,7 @@ import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
 import logic.LogicFactory;
 import logic.PersonLogic;
+import static logic.PersonLogic.ID;
 
 /**
  *
@@ -33,7 +34,7 @@ public class DonationRecordTableJSP extends HttpServlet {
             throws ServletException, IOException {
         
         String path = req.getServletPath();
-        req.setAttribute("entities", extractPersonTableData(req));
+        req.setAttribute("entities", extractDonRecTableData(req));
         req.setAttribute("request", toStringMap(req.getParameterMap()));
         req.setAttribute("path", path);
         req.setAttribute("message", message);
@@ -45,7 +46,7 @@ public class DonationRecordTableJSP extends HttpServlet {
      * used to extract the search from JSP and pass in the String to the search method
      * if no results, return empty list, if nothing searched get all
      */
-    private List<?> extractPersonTableData(HttpServletRequest req) {
+    private List<?> extractDonRecTableData(HttpServletRequest req) {
         String search = req.getParameter("searchText");
         DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
         req.setAttribute("columnName", logic.getColumnNames());
@@ -96,30 +97,16 @@ public class DonationRecordTableJSP extends HttpServlet {
             throws ServletException, IOException {
         
         DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
-       //PersonLogic personLogic = LogicFactory.getFor("Person");
+       PersonLogic personLogic = LogicFactory.getFor("Person");
        // BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
 
 
         try{
         if(request.getParameter("edit") != null) {
+           // personId and donationId are set to null after update?
+           //tried settign person if here but the table would stop updatign the rest of columns
             DonationRecord donRec = logic.updateEntity(request.getParameterMap());
-        //    String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
-//            String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
-//            
-//           //String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
-            //Person c = personLogic.getWithId(Integer.parseInt(personId));
-//           BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId)); 
-//           
-//           // blDon.update(b);
-//           //personLogic.update(c);
-//           
-//           donRec.setBloodDonation(b);
-              
-            // donRec.getPerson();
              
-//            
-           
-           // personLogic.update(c);
             logic.update(donRec);
         }
         else if(request.getParameter("delete") != null){
@@ -145,7 +132,7 @@ public class DonationRecordTableJSP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        fillPersonTableData(request, response);
+        doPost(request, response);
     }
 
     @Override
