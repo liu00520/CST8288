@@ -91,6 +91,8 @@ public class BloodBankTest {
     public void tearDown() throws Exception{
         if( bloodBankExpected != null ){
             logic.delete( bloodBankExpected );
+            personLogic.delete(personExpected);
+            
         }
     }
 
@@ -135,7 +137,7 @@ public class BloodBankTest {
         assertBBEquals(bloodBankExpected, returneBloodBank);
     }
     
-@Test
+    @Test
     final void testGetBloodBankWithPrivatelyOwned() {
         assertNotNull(bloodBankExpected);
         List<BloodBank> banksEstablishedAt = logic.getBloodBankWithPrivatelyOwned(bloodBankExpected.getPrivatelyOwned());
