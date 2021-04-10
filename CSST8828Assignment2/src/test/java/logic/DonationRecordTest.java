@@ -134,6 +134,7 @@ class DonationRecordTest {
     final void tearDown() throws Exception {
         if (donationRecordExpected != null) {
             logic.delete(donationRecordExpected);
+        
 
         }
     }

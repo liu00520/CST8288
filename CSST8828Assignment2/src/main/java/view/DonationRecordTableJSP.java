@@ -1,5 +1,6 @@
 package view;
 
+import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
 import logic.LogicFactory;
 import logic.PersonLogic;
@@ -94,14 +96,30 @@ public class DonationRecordTableJSP extends HttpServlet {
             throws ServletException, IOException {
         
         DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
-         PersonLogic personLogic = LogicFactory.getFor("Person");
+       //PersonLogic personLogic = LogicFactory.getFor("Person");
+       // BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
+
 
         try{
         if(request.getParameter("edit") != null) {
             DonationRecord donRec = logic.updateEntity(request.getParameterMap());
-            String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
-            Person c = personLogic.getWithId(Integer.parseInt(personId));
-            donRec.setPerson(c);
+        //    String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
+//            String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
+//            
+//           //String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
+            //Person c = personLogic.getWithId(Integer.parseInt(personId));
+//           BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId)); 
+//           
+//           // blDon.update(b);
+//           //personLogic.update(c);
+//           
+//           donRec.setBloodDonation(b);
+              
+            // donRec.getPerson();
+             
+//            
+           
+           // personLogic.update(c);
             logic.update(donRec);
         }
         else if(request.getParameter("delete") != null){

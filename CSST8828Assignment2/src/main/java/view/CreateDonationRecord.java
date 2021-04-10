@@ -1,21 +1,22 @@
 package view;
 
+
 import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
-import static logic.DonationRecordLogic.PERSON_ID;
+
 import logic.LogicFactory;
 import logic.PersonLogic;
 
@@ -134,19 +135,21 @@ public class CreateDonationRecord extends HttpServlet {
         DonationRecordLogic dRLogic = LogicFactory.getFor("DonationRecord");
         // need person logic
         PersonLogic personLogic = LogicFactory.getFor("Person");
+        BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
 
         try {
             DonationRecord donationRecord = dRLogic.createEntity(request.getParameterMap());
             //get Person_id the user inputed
 
             String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
+            String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
 
             //use the id and person logic to get the entity from database
             Person c = personLogic.getWithId(Integer.parseInt(personId));
-
+            BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId));
             // set person on donationRecord Object
             donationRecord.setPerson(c);
-
+            donationRecord.setBloodDonation(b);
             // create dependancy logic Person and BloodDonation. need to merge for this step
             dRLogic.add(donationRecord);
 
@@ -155,10 +158,7 @@ public class CreateDonationRecord extends HttpServlet {
             errorMessage = ex.getMessage();
         }
 
-        // } else  {
-        //if duplicate print the error message
-        //      errorMessage = "Record_id: \"" + record_id + "\" already exists";
-        // }
+       
         if (request.getParameter("add") != null) {
             //if add button is pressed return the same page
             processRequest(request, response);

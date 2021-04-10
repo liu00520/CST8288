@@ -18,7 +18,7 @@ import logic.LogicFactory;
  *
  * @author Jia Liu 040992662
  */
-@WebServlet(name = "DonationRecordTable", urlPatterns = {"/DonationRecordTable"})
+@WebServlet(name = "BloodBankTable", urlPatterns = {"/BloodBankTable"})
 public class BloodBankTableView extends HttpServlet {
 
     /**
