@@ -82,40 +82,22 @@ public class DonateBloodForm extends HttpServlet {
             
             
             
-           out.println("<div class=\"grid-container\">");
-           out.println("<div class=\"item\"><h2>Blood</h2></div>");
-           out.println("BloodGroup");
-            BloodDonationLogic log2= LogicFactory.getFor("BloodDonation");
-            List<BloodDonation> list2= log2.getAll();
-            out.println("<select name=\"sub\">");
+//           out.println("<div class=\"grid-container\">");
+//            out.println("<div class=\"item\"><h2>Blood</h2></div>");
+//            out.println("<div class=\"item\">First Name</div>");
+//            out.print("<div>");
+//            out.printf("<input type=\"text\" name=\"%s\" value=\"\"></div>", PersonLogic.FIRST_NAME);
+//
+//            out.println("Last Name");
+//            out.printf("<input type=\"text\" name=\"%s\" value=\"\">", PersonLogic.LAST_NAME);
+//            out.println("Phone");
+//            out.printf("<input type=\"text\" name=\"%s\" value=\"\">", PersonLogic.PHONE);
+//            out.println("Address");
+//            out.printf("<input type=\"text\" name=\"%s\" value=\"\">", PersonLogic.ADDRESS);
+//            out.println("Date of Birth");
+//            out.printf("<input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\">", PersonLogic.BIRTH);
+//            out.println("</div>");
 
-              for (BloodDonation d : list2 ){
-                  out.printf("<option value=\"%s\"selected>%s</option>",d.getBloodGroup(),d.getBloodGroup());
-              }
-           out.println("</select><br><br>");
-           
-           out.println("Amount");
-           out.printf("<input type=\"text\" name=\"%s\" value=\"\" >",BloodDonationLogic.MILLILITERS);
-           out.println("RHD");
-           BloodDonationLogic log3= LogicFactory.getFor("BloodDonation");
-           List<BloodDonation> list3= log3.getAll();
-       
-            out.println("<select name=\"sub\">");
-
-              for (BloodDonation g : list3 ){
-                  out.printf("<option value=\"%s\"selected>%s</option>",g.getRhd(),g.getRhd());
-              }
-        out.println("</select><br><br>");
-            out.println("Tested");
-            DonationRecordLogic log1= LogicFactory.getFor("DonationRecord");
-            List<DonationRecord> list1= log1.getAll();
-            out.println("<select name=\"sub\">");
-
-              for (DonationRecord c : list1 ){
-                  out.printf("<option value=\"%s\" selected>%s</option>",c.getTested(), c.getTested());
-              }      
-           out.println("</select><br><br>");
-            out.print("</div>");
             
             
             
@@ -212,15 +194,16 @@ public class DonateBloodForm extends HttpServlet {
 
         DonationRecordLogic donRecordLogic = LogicFactory.getFor("DonationRecord");
         PersonLogic personLogic = LogicFactory.getFor("Person");
-        BloodDonationLogic bD=LogicFactory.getFor("BloodDonation");
+        //BloodDonationLogic bD=LogicFactory.getFor("BloodDonation");
 
         try {
             DonationRecord donRecord = donRecordLogic.createEntity(request.getParameterMap());
+            
             donRecordLogic.add(donRecord);
             Person person = personLogic.createEntity(request.getParameterMap());
             personLogic.add(person);
-            BloodDonation blDon = bD.createEntity(request.getParameterMap());
-            bD.add(blDon);
+//            BloodDonation blDon = bD.createEntity(request.getParameterMap());
+//            bD.add(blDon);
 
           
       
