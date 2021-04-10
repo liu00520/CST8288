@@ -89,7 +89,7 @@ public class BloodBankTest {
     
     @AfterEach
     public void tearDown() throws Exception{
-        if( bloodBankExpected != null ){
+        if( bloodBankExpected != null || personExpected !=null){
             logic.delete( bloodBankExpected );
             personLogic.delete(personExpected);
             
