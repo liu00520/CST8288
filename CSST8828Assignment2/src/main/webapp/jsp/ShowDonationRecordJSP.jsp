@@ -60,23 +60,23 @@
             };
         </script>
     </head>
-    <body>
-        <h2 style="text-align: center;">Donation Record JSP</h2><br>
-        <form>
+    <body style=" background-color: darksalmon">
+        <h2 style="text-align: center; color:brown">Donation Record JSP</h2><br>
+        <form style=" text-align: center; align-items: center; font-weight: bold">
             <table style="vertical-align: middle">
                 <tr>
                     <!--Input for the search bar-->
                     <td><input type="text" name="searchText"/></td>
-                    <td><input type="submit" name="Search"/></td>
+                    <td><input type="submit" name="Search" style="color: aqua; background: gray"/></td>
                 </tr>
             </table>
         </form>
         <form method="post">
             <table border="2">
                 <tr>
-                    <th><input type="submit" name="delete" value="Delete"/></th>
+                    <th><input type="submit" name="delete" value="Delete" style="color: aqua; background: gray"/></th>
                     <th>Edit</th>
-                    <c:forEach var="name" items="${columnName}">
+                    <c:forEach var="name" items="${columnName}" >
                     <th>${name}</th>
                     </c:forEach>
                 </tr>
@@ -95,7 +95,7 @@
                     </tr>
                 </c:forEach >
                 <tr>
-                    <th><input type="submit" name="delete" value="Delete"/></th>
+                    <th><input type="submit" name="delete" value="Delete" style="color: aqua; background: gray"/></th>
                     <th>Edit</th>
                     <c:forEach var="name" items="${columnName}" >
                     <th>${name}</th>

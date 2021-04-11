@@ -1,6 +1,7 @@
 package view;
 
 
+import common.ValidationException;
 import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
@@ -49,10 +50,10 @@ public class CreateDonationRecord extends HttpServlet {
             out.println("<head>");
             out.println("<title>Create Donation Record</title>");
             out.println("</head>");
-            out.println("<body>");
+            out.println("<body style =\"background-color: darksalmon\">");
             out.println("<div style=\"text-align: center;\">");
             out.println("<div style=\"display: inline-block; text-align: left;\">");
-            out.println("<form method=\"post\">");
+            out.println("<form method=\"post\" style =\"background-color: darksalmon; text-align: center;font-weight: bold\">");
 
             out.println("Person_Id:<br>");
 
@@ -74,8 +75,8 @@ public class CreateDonationRecord extends HttpServlet {
             out.println("Created:<br>");
             out.printf("<br><input type=\"datetime-local\" step='1' name=\"%s\" value=\"\"><br><br>", DonationRecordLogic.CREATED);
             out.println("<br>");
-            out.println("<input type=\"submit\" name=\"view\" value=\"Add and View\">");
-            out.println("<input type=\"submit\" name=\"add\" value=\"Add\">");
+            out.println("<input type=\"submit\" name=\"view\" value=\"Add and View\" style=\"color: aqua; background: gray\">");
+            out.println("<input type=\"submit\" name=\"add\" value=\"Add\" style=\"color: aqua; background: gray\">");
             out.println("</form>");
 
             if (errorMessage != null && !errorMessage.isEmpty()) {
@@ -153,7 +154,7 @@ public class CreateDonationRecord extends HttpServlet {
             // create dependancy logic Person and BloodDonation. need to merge for this step
             dRLogic.add(donationRecord);
 
-        } catch (Exception ex) {
+        } catch (ValidationException ex) {
             log("POST",ex);
             errorMessage = ex.getMessage();
         }

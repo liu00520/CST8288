@@ -3,15 +3,12 @@ package logic;
 import common.EMFactory;
 import common.TomcatStartUp;
 import common.ValidationException;
-import entity.Account;
-import entity.BloodBank;
 import entity.BloodDonation;
 import entity.BloodGroup;
 import entity.DonationRecord;
 import entity.Person;
 import entity.RhesusFactor;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +17,6 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import static logic.DonationRecordLogic.ADMINSTRATOR;
-import static logic.DonationRecordLogic.CREATED;
-import static logic.DonationRecordLogic.DONATION_ID;
-import static logic.DonationRecordLogic.HOSPITAL;
-import static logic.DonationRecordLogic.PERSON_ID;
-import static logic.DonationRecordLogic.TESTED;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,21 +25,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author sarah
  */
-@Disabled
+//@Disabled
 class DonationRecordTest {
 
     private DonationRecordLogic logic;
     private DonationRecord donationRecordExpected;
     private Person person;
     private BloodDonation blDon;
-
+    
     @BeforeAll
     final static void setUpBeforeClass() throws Exception {
         TomcatStartUp.createTomcat("/SimpleBloodBank", "common.ServletListener", "simplebloodbank-PU-test");
@@ -63,21 +53,12 @@ class DonationRecordTest {
     final void setUp() throws Exception {
 
         logic = LogicFactory.getFor("DonationRecord");
-        /* **********************************
-         * ***********IMPORTANT**************
-         * **********************************/
-        //we only do this for the test.
-        //always create Entity using logic.
-        //we manually make the account to not rely on any logic functionality , just for testing
-
+       
         //get an instance of EntityManager
         EntityManager em = EMFactory.getEMF().createEntityManager();
 
         //start a Transaction
         em.getTransaction().begin();
-
-        //create person for dependancy 
-//        person= em.find(Person.class,1);
 
         TypedQuery<Person> tq = em.createQuery("select p from Person p", Person.class);
 
@@ -98,9 +79,7 @@ class DonationRecordTest {
 
         List<BloodDonation> list1 = t.getResultList();
         if (list.isEmpty()) {
-        //create BloodDonation for dependancy 
-        //blDon = em.find(BloodDonation.class, 1);
-       // if (blDon == null) {
+       
             blDon = new BloodDonation();
             blDon.setMilliliters(5);
             blDon.setBloodGroup(BloodGroup.B);
@@ -121,12 +100,10 @@ class DonationRecordTest {
         entity.setPerson(person);
         entity.setBloodDonation(blDon);
 
-        //add an account to hibernate, account is now managed.
-        //we use merge instead of add so we can get the updated generated ID.
         donationRecordExpected = em.merge(entity);
-        //commit the changes
+    
         em.getTransaction().commit();
-        //close EntityManager
+       
         em.close();
     }
 
@@ -134,6 +111,8 @@ class DonationRecordTest {
     final void tearDown() throws Exception {
         if (donationRecordExpected != null) {
             logic.delete(donationRecordExpected);
+             
+            //shouls I be delteing person and blood logic here 
         
 
         }
@@ -157,12 +136,12 @@ class DonationRecordTest {
      * @param actual
      */
     private void assertDonRecordEquals(DonationRecord expected, DonationRecord actual) {
-        //assert all field to guarantee they are the same
+     
         assertDonRecordEquals(expected, actual, true);
     }
 
     private void assertDonRecordEquals(DonationRecord expected, DonationRecord actual, boolean testDepend) {
-        //assert all field to guarantee they are the same
+     
         assertEquals(expected.getId(), actual.getId());
         if (testDepend) {
             assertEquals(expected.getPerson().getId(), actual.getPerson().getId());
@@ -174,7 +153,7 @@ class DonationRecordTest {
         assertEquals(expected.getCreated(), actual.getCreated());
     }
 
-    //failing nullpointer excption
+    
     @Test
     final void testGetWithId() {
 
@@ -242,23 +221,21 @@ class DonationRecordTest {
         sampleMap.put(DonationRecordLogic.TESTED, new String[]{"false"});
         sampleMap.put(DonationRecordLogic.CREATED, new String[]{"1990-10-10 10:10:10.0"});
         sampleMap.put(DonationRecordLogic.PERSON_ID, new String[]{"2"});
-        sampleMap.put(DonationRecordLogic.DONATION_ID, new String[]{"6"});
+        sampleMap.put(DonationRecordLogic.DONATION_ID, new String[]{"1"});
 
      
       PersonLogic personLogic = LogicFactory.getFor("Person");
-
+      BloodDonationLogic bloodLogic = LogicFactory.getFor("BloodDonation");
         
         DonationRecord returnedRecord = logic.createEntity(sampleMap);
         //call the person logic, get the person with specific id then add it to record
-   //    int PERSON_ID1 = Integer.valueOf(DonationRecordLogic.PERSON_ID);
-      //  logic.findByPerson(PERSON_ID1);
-      // Person c = personLogic.getWithId(PERSON_ID1);
-        //add the depedencies
-      //  returnedRecord.setPerson(c);
-      //  logic.add(returnedRecord);
-
-
-        //DonationRecord returnedRecord = logic.createEntity(sampleMap);
+         //add the depedencies
+         Person c =personLogic.getWithId(2);
+         BloodDonation b =bloodLogic.getWithId(1);
+         returnedRecord.setPerson(c);
+         returnedRecord.setBloodDonation(b);
+       
+      
 
         logic.add(returnedRecord);
 
@@ -270,16 +247,12 @@ class DonationRecordTest {
         assertEquals(sampleMap.get(DonationRecordLogic.CREATED)[0], returnedRecord.getCreated().toString());
         assertEquals(sampleMap.get(DonationRecordLogic.TESTED)[0], String.valueOf(returnedRecord.getTested()));
 
-     //   assertEquals(sampleMap.get(DonationRecordLogic.PERSON_ID)[0],returnedRecord.getPerson().getId());
-        //assertEquals(sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
-
-        // assertEquals( sampleMap.get( DonationRecordLogic.PERSON_ID )[ 0 ], returnedRecord.getPerson().getId());
-        //  assertEquals( sampleMap.get( DonationRecordLogic.DONATION_ID)[ 0 ], returnedRecord.getBloodDonation().getId().toString() );
-
-
+       
+        assertEquals(sampleMap.get(DonationRecordLogic.PERSON_ID)[0],String.valueOf(returnedRecord.getPerson().getId()));
+         assertEquals(sampleMap.get(DonationRecordLogic.DONATION_ID)[0],String.valueOf(returnedRecord.getBloodDonation().getId()));
+       
         logic.delete(returnedRecord);
     }
-
     @Test
     final void testCreateEntity() {
         Map<String, String[]> sampleMap = new HashMap<>();
@@ -342,7 +315,7 @@ class DonationRecordTest {
                     .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
         };
 
-//        //idealy every test should be in its own method
+
         fillMap.accept(testMap);
 
         testMap.replace(DonationRecordLogic.ID, new String[]{""});
@@ -445,14 +418,14 @@ class DonationRecordTest {
     @Test
     final void testSearch() {
         int foundFull = 0;
-        //search for a substring of one of the fields in the expectedAccount
+        
         String searchString = donationRecordExpected.getHospital().substring(3);
-        //in account we only search for display name and user, this is completely based on your design for other entities.
+    
         List<DonationRecord> returnedRecords = logic.search(searchString);
         for (DonationRecord record : returnedRecords) {
-            //all accounts must contain the substring
+         
             assertTrue(record.getHospital().contains(searchString) || record.getAdministrator().contains(searchString));
-            //exactly one account must be the same
+         
             if (record.getId().equals(donationRecordExpected.getId())) {
                 assertDonRecordEquals(donationRecordExpected, record, false);
                 foundFull++;

@@ -105,7 +105,7 @@ public class CreateDonationRecordJSP extends HttpServlet {
             String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
             Person c = getPerson().getWithId(Integer.parseInt(personId));
             BloodDonation b = getDon().getWithId(Integer.parseInt(bloodId));
-            // set person on donationRecord Object
+ 
             record.setPerson(c);
             record.setBloodDonation(b);
             
