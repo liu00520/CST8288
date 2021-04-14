@@ -1,16 +1,21 @@
 package view;
 
+
 import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
 import java.io.IOException;
-import java.io.PrintWriter;
+
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +25,7 @@ import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
 import logic.LogicFactory;
 import logic.PersonLogic;
-import static logic.PersonLogic.ID;
+
 
 /**
  *
@@ -97,16 +102,35 @@ public class DonationRecordTableJSP extends HttpServlet {
             throws ServletException, IOException {
         
         DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
-       PersonLogic personLogic = LogicFactory.getFor("Person");
-       // BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
+        PersonLogic personLogic = LogicFactory.getFor("Person");
+        BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
 
 
         try{
         if(request.getParameter("edit") != null) {
-           // personId and donationId are set to null after update?
-           //tried settign person if here but the table would stop updatign the rest of columns
+          
             DonationRecord donRec = logic.updateEntity(request.getParameterMap());
-             
+                
+ 
+           donRec = logic.getWithId(donRec.getId());
+           
+           donRec.setAdministrator(request.getParameter(DonationRecordLogic.ADMINSTRATOR));
+           donRec.setHospital(request.getParameter(DonationRecordLogic.HOSPITAL));
+           donRec.setTested(Boolean.parseBoolean(request.getParameter((DonationRecordLogic.TESTED))));
+           String date= request.getParameter(DonationRecordLogic.CREATED);
+           Date date1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);  
+           donRec.setCreated(date1);
+          
+           
+           String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
+           Person c = personLogic.getWithId(Integer.parseInt(personId));
+           String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
+           BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId));
+
+           donRec.setPerson(c);
+           donRec.setBloodDonation(b);
+              
+            
             logic.update(donRec);
         }
         else if(request.getParameter("delete") != null){
@@ -157,4 +181,6 @@ public class DonationRecordTableJSP extends HttpServlet {
         return "Donation Record JSP";
     }
 
+    
+    
 }

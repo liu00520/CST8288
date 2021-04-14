@@ -13,7 +13,7 @@ public abstract class LogicFactory {
 
 
 
-    public static < T> T getFor(String entityName) {
+    public static <T> T getFor(String entityName) {
 
         try {
             return getFor((Class<T>) Class.forName(PACKAGE + entityName + SUFFIX));
