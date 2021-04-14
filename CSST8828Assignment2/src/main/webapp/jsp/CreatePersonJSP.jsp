@@ -16,10 +16,12 @@
     <body>
         <h2 style="text-align: center;">Create Person JSP</h2><hr><br>
         <form method="post" >
+            <!--looping through each column code starting at index 1(excl. id) to print the
+            column name & assign the name to that column code-->
             <c:forEach var="cols" items="${columns}" begin="1" end="4" varStatus="loop" >
                 <div>
                     <p><c:out value="${columnNames[loop.index]}" /></p>  
-                  <input type="text" class="create" name="${cols}" value="" /> 
+                <input type="text" name="${cols}" value="" /> 
                 </div>
             </c:forEach >
             <p><c:out value="${columnNames[5]}" /></p>
