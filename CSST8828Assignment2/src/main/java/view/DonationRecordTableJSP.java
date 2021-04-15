@@ -110,16 +110,7 @@ public class DonationRecordTableJSP extends HttpServlet {
         if(request.getParameter("edit") != null) {
           
             DonationRecord donRec = logic.updateEntity(request.getParameterMap());
-                
- 
-           donRec = logic.getWithId(donRec.getId());
-           
-           donRec.setAdministrator(request.getParameter(DonationRecordLogic.ADMINSTRATOR));
-           donRec.setHospital(request.getParameter(DonationRecordLogic.HOSPITAL));
-           donRec.setTested(Boolean.parseBoolean(request.getParameter((DonationRecordLogic.TESTED))));
-           String date= request.getParameter(DonationRecordLogic.CREATED);
-           Date date1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);  
-           donRec.setCreated(date1);
+     
           
            
            String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
