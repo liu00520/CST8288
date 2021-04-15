@@ -83,13 +83,14 @@ public class DonationRecordLogic extends GenericLogic<DonationRecord, DonationRe
 
 //        return new AccountBuilder().SetData( parameterMap ).build();
         Objects.requireNonNull( parameterMap, "parameterMap cannot be null" );
+         DonationRecord donationRecordEntity = new DonationRecord();
         //same as if condition below
         if (parameterMap == null) {
             throw new NullPointerException("parameterMap cannot be null");
        }
 
         //create a new Entity object
-        DonationRecord donationRecordEntity = new DonationRecord();
+       
 
         //ID is generated, so if it exists add it to the entity object
         //otherwise it does not matter as mysql will create an if for it.

@@ -1,62 +1,53 @@
 package view;
 
-
+import entity.BloodBank;
 import entity.BloodDonation;
-import entity.DonationRecord;
-import entity.Person;
 import java.io.IOException;
-
-import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodBankLogic;
 import logic.BloodDonationLogic;
-import logic.DonationRecordLogic;
 import logic.LogicFactory;
-import logic.PersonLogic;
-
 
 /**
  *
- * @author sarah
+ * @author danny
  */
-@WebServlet(name = "DonationRecordTableJSP", urlPatterns = {"/DonationRecordTableJSP"})
-public class DonationRecordTableJSP extends HttpServlet {
-
-  String message;
+@WebServlet(name = "BloodDonationTableJSP", urlPatterns = {"/BloodDonationTableJSP"})
+public class BloodDonationTableJSP extends HttpServlet  {
+    
+    String message;
     private void fillPersonTableData(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         
         String path = req.getServletPath();
-        req.setAttribute("entities", extractDonRecTableData(req));
+        req.setAttribute("entities", extractPersonTableData(req));
         req.setAttribute("request", toStringMap(req.getParameterMap()));
         req.setAttribute("path", path);
         req.setAttribute("message", message);
         req.setAttribute("title", path.substring(1));
-        req.getRequestDispatcher("jsp/ShowDonationRecordJSP.jsp").forward(req, resp);
+        req.getRequestDispatcher("jsp/ShowBloodDonationJSP.jsp").forward(req, resp);
     }
-
-    /**
+    
+     /**
      * used to extract the search from JSP and pass in the String to the search method
      * if no results, return empty list, if nothing searched get all
      */
-    private List<?> extractDonRecTableData(HttpServletRequest req) {
-        String search = req.getParameter("searchText");
-        DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
+    private Object extractPersonTableData(HttpServletRequest req) {
+       String search = req.getParameter("searchText");
+        BloodDonationLogic logic = LogicFactory.getFor("BloodDonation");
         req.setAttribute("columnName", logic.getColumnNames());
         req.setAttribute("columnCode", logic.getColumnCodes());
-        List<DonationRecord> list;
+        List<BloodDonation> list;
         
         if(search != null) {
             list = logic.search(search);
@@ -71,61 +62,46 @@ public class DonationRecordTableJSP extends HttpServlet {
     }
     
     private <T> List<?> appendDataToList(List<T> list, Function<T, List<?>> toArray) {
-        List<List<?>> dataList = new ArrayList<>(list.size());
-        list.forEach(e -> dataList.add(toArray.apply(e)));
-        return dataList;
+        List<List<?>> newList = new ArrayList<>(list.size());
+        list.forEach(e -> newList.add(toArray.apply(e)));
+        return newList;
     }
-    
-    //appending key,values for the input types at the bottom of the table
-    private String toStringMap(Map<String, String[]> e) {
+
+    private Object toStringMap(Map<String, String[]> parameterMap) {
         StringBuilder builder = new StringBuilder();
-        e.keySet().forEach((k) -> {
+        parameterMap.keySet().forEach((k) -> {
             builder.append("Key=").append(k).append(",")
-                    .append("Value/s=").append(Arrays.toString(e.get(k)))
+                    .append("Value/s=").append(Arrays.toString(parameterMap.get(k)))
                     .append(System.lineSeparator());
         });
         return builder.toString();
     }
     
-    
-        /**
+    /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
+     * @param req servlet request
+     * @param resp servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * handling edit, delete parameters
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost( HttpServletRequest req, HttpServletResponse resp )
             throws ServletException, IOException {
         
-        DonationRecordLogic logic = LogicFactory.getFor("DonationRecord");
-        PersonLogic personLogic = LogicFactory.getFor("Person");
-        BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
-
-
+        BloodDonationLogic logic = LogicFactory.getFor( "BloodDonation" );
+        BloodBankLogic bbLogic = LogicFactory.getFor("BloodBank");
+        
         try{
-        if(request.getParameter("edit") != null) {
-          
-            DonationRecord donRec = logic.updateEntity(request.getParameterMap());
-     
-          
-           
-           String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
-           Person c = personLogic.getWithId(Integer.parseInt(personId));
-           String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
-           BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId));
-
-           donRec.setPerson(c);
-           donRec.setBloodDonation(b);
-              
-            
-            logic.update(donRec);
+        if(req.getParameter("edit") != null) {
+            BloodDonation bloodDon = logic.updateEntity(req.getParameterMap());
+            String bankId = req.getParameter(BloodDonationLogic.BANK_ID);
+            BloodBank bb = bbLogic.getWithId(Integer.parseInt(bankId));
+            bloodDon.setBloodBank(bb);
+            logic.update(bloodDon);
         }
-        else if(request.getParameter("delete") != null){
-            String[] ids = request.getParameterMap().get("deleteMark");
+        else if(req.getParameter("delete") != null){
+            String[] ids = req.getParameterMap().get("deleteMark");
             for(String id : ids) {
                 logic.delete(logic.getWithId(Integer.valueOf(id)));
             }
@@ -133,10 +109,10 @@ public class DonationRecordTableJSP extends HttpServlet {
         } catch(Exception e) {
             message = e.getMessage();
         }
-        fillPersonTableData(request, response);
+        fillPersonTableData(req, resp);
     }
-
-   /**
+    
+    /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
@@ -147,7 +123,7 @@ public class DonationRecordTableJSP extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+        fillPersonTableData(request, response);
     }
 
     @Override
@@ -169,9 +145,6 @@ public class DonationRecordTableJSP extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Donation Record JSP";
+        return "Blood Donation JSP";
     }
-
-    
-    
 }

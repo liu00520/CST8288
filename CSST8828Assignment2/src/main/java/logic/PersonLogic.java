@@ -97,6 +97,7 @@ public class PersonLogic extends GenericLogic<Person, PersonDAL> {
         };
         //getting and storing the static class variables. Replacing the "T" in date & using
         //the String->date conversion method
+  
         Date birthDate = this.convertStringToDate(parameterMap.get(BIRTH)[0].replace("T", " "));
         String firstName = parameterMap.get(FIRST_NAME)[0];
         String lastName = parameterMap.get(LAST_NAME)[0];

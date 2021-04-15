@@ -1,21 +1,21 @@
 <%-- 
-    Document   : ShowDonationRecordJSP
-    Created on : Apr. 9, 2021, 12:16:24 p.m.
-    Author     : sarah
+    Document   : ShowBloodDonationJSP
+    Created on : Apr. 11, 2021, 7:21:19 p.m.
+    Author     : danny
 --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!--allows updating, deleting, and searching Person data-->
+
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="style/tablestyle.css">
         <title><c:out value="${title}"/></title>
+        <link rel="stylesheet" type="text/css" href="style/tablestyle.css">
         <script>
             var isEditActive = false;
             var activeEditID = -1;
@@ -60,23 +60,23 @@
             };
         </script>
     </head>
-    <body style=" background-color: darksalmon">
-        <h2 style="text-align: center; color:brown">Donation Record JSP</h2><br>
-        <form style=" text-align: center; align-items: center; font-weight: bold">
+    <body>
+        <h2 style="text-align: center;">Blood Donation JSP</h2><br>
+        <form>
             <table style="vertical-align: middle">
                 <tr>
                     <!--Input for the search bar-->
                     <td><input type="text" name="searchText"/></td>
-                    <td><input type="submit" name="Search" style="color: aqua; background: gray"/></td>
+                    <td><input type="submit" name="Search"/></td>
                 </tr>
             </table>
         </form>
         <form method="post">
             <table border="2">
                 <tr>
-                    <th><input type="submit" name="delete" value="Delete" style="color: aqua; background: gray"/></th>
+                    <th><input type="submit" name="delete" value="Delete"/></th>
                     <th>Edit</th>
-                    <c:forEach var="name" items="${columnName}" >
+                    <c:forEach var="name" items="${columnName}">
                     <th>${name}</th>
                     </c:forEach>
                 </tr>
@@ -95,7 +95,7 @@
                     </tr>
                 </c:forEach >
                 <tr>
-                    <th><input type="submit" name="delete" value="Delete" style="color: aqua; background: gray"/></th>
+                    <th><input type="submit" name="delete" value="Delete"/></th>
                     <th>Edit</th>
                     <c:forEach var="name" items="${columnName}" >
                     <th>${name}</th>

@@ -1,16 +1,23 @@
 package view;
 
+
+import common.ValidationException;
+import entity.BloodBank;
+import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodBankLogic;
+import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
 import logic.LogicFactory;
 import logic.PersonLogic;
@@ -25,6 +32,7 @@ import logic.PersonLogic;
 public class DonateBloodForm extends HttpServlet {
 
     private String message;
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -71,23 +79,62 @@ public class DonateBloodForm extends HttpServlet {
             out.printf("<input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\">", PersonLogic.BIRTH);
             out.println("</div>");
 
+            
+            out.println("<div class=\"grid-container\">");
+            out.println("<div class=\"item\"><h2>Blood</h2></div>");
+            out.println("<div class=\"item\">Blood Group</div>");
+ 
+            out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.BLOOD_GROUP);
+          
+            out.println( "<option value=\"O\">O</option>" );
+            out.println( "<option value=\"A\">A</option>" );
+            out.println( "<option value=\"AB\">AB</option>" );
+            out.println( "<option value=\"B\">B</option>" );
+            out.println( "</select><br><br>");
+       
+            out.println("Amount");
+            out.printf("<input type=\"number\" name=\"%s\" value=\"\">", BloodDonationLogic.MILLILITERS);
+           
+            out.println("Tested");
+            out.printf("<select type=\"text\" name=\"%s\" value=\"\">", DonationRecordLogic.TESTED);
+        
+            out.println( "<option value=\"true\">True</option>" );
+            out.println( "<option value=\"false\">False</option>" );
+           
+            out.println( "</select><br><br>");
+       
+            out.println("RHD");
+            out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.RHESUS_FACTOR);
+            out.println( "<option value=\"-\">Negative</option>" );
+            out.println( "<option value=\"+\">Positive</option>" );
+           
+            out.println( "</select><br><br>");
+       
+            out.println("</div>");
+           
+            
             out.println("<div class=\"grid-container\">");
             out.println("<div class=\"item\"><h2>Administrator</h2></div>");
-            out.println("<div class=\"item\"> Hospital</div>");
-            out.printf("<input type=\"text\" name=\"%s\" value=\"\">", DonationRecordLogic.HOSPITAL);
+            out.println("<div class=\"item\">Hospital</div>");
+            out.printf("<input type=\"text\" name=\"%s\" value=\"\">",DonationRecordLogic.HOSPITAL);
             out.println("Administrator");
-            out.printf("<input type=\"text\" name=\"%s\" value=\"\" >", DonationRecordLogic.ADMINSTRATOR);
+            out.printf("<input type=\"text\" name=\"%s\" value=\"\" >",DonationRecordLogic.ADMINSTRATOR);
             out.println("Date");
-            out.printf("<input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\">", DonationRecordLogic.CREATED);
+            out.printf("<input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\">",DonationRecordLogic.CREATED);
             out.println("BloodBank");
-            //get all blood banks
-            out.println("<select name=\"sub\">");
-            //for each blood bank creat an option with value being the ID
-            out.println("<option value=\"opel\">BlodyBank</option>");
-            out.println("<option value=\"audi\">Bank</option>");
-            out.println("</select><br><br>");
+              
+                
+         
+
+
+            out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.BANK_ID);
+            out.println( "<option value=\"1\">BloddyBank</option>" );
+            out.println( "<option value=\"2\">Bank</option>" );
+           
+            out.println( "</select><br><br>");
             out.print("</div>");
-            //insert here
+            
+    
             out.println("<input type=\"submit\" name=\"add\" value=\"Add\">");
             out.println("</form>");
 
@@ -144,20 +191,41 @@ public class DonateBloodForm extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
 
-        DonationRecordLogic donRecordLogic = LogicFactory.getFor("DonationRecord");
+        DonationRecordLogic donL = LogicFactory.getFor("DonationRecord");
         PersonLogic personLogic = LogicFactory.getFor("Person");
-
+        BloodDonationLogic bD=LogicFactory.getFor("BloodDonation");
+        BloodBankLogic bln=LogicFactory.getFor("BloodBank");
+     
         try {
-            DonationRecord donRecord = donRecordLogic.createEntity(request.getParameterMap());
-            donRecordLogic.add(donRecord);
-            Person person = personLogic.createEntity(request.getParameterMap());
-            personLogic.add(person);
 
+         
+          Person person = personLogic.createEntity(request.getParameterMap());
+          
+           BloodDonation blDon = bD.createEntity(request.getParameterMap());
+           String bankId = request.getParameter(BloodDonationLogic.BANK_ID);
+           BloodBank b = bln.getWithId(Integer.parseInt(bankId));
+            blDon.setBloodBank(b);
+              
+          DonationRecord don = donL.createEntity(request.getParameterMap());
+          
+          personLogic.add(person);
+          bD.add(blDon);
+          don.setBloodDonation(blDon);
+          don.setPerson(person);
+          donL.add(don);
+        
+            
+         
+    
+        } catch(ValidationException e) {
+
+          message = e.getMessage();
         } catch(Exception e) {
 
             message = e.getMessage();
         }
         if (request.getParameter("add") != null) {
+            
             processRequest(request, response);
         }
 

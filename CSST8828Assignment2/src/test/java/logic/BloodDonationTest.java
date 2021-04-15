@@ -32,6 +32,8 @@ import org.junit.jupiter.api.Test;
  * @author Shariar (Shawn) Emami
  */
 
+//@Disabled
+
 class BloodDonationTest {
 
     private BloodDonationLogic logic;

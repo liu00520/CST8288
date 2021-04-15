@@ -1,21 +1,23 @@
 package view;
 
+
+import common.ValidationException;
 import entity.BloodDonation;
 import entity.DonationRecord;
 import entity.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
-import static logic.DonationRecordLogic.PERSON_ID;
+
 import logic.LogicFactory;
 import logic.PersonLogic;
 
@@ -23,6 +25,7 @@ import logic.PersonLogic;
  *
  * @author sarah
  */
+
 @WebServlet(name = "CreateDonationRecord", urlPatterns = {"/CreateDonationRecord"})
 public class CreateDonationRecord extends HttpServlet {
 
@@ -47,10 +50,10 @@ public class CreateDonationRecord extends HttpServlet {
             out.println("<head>");
             out.println("<title>Create Donation Record</title>");
             out.println("</head>");
-            out.println("<body>");
+            out.println("<body style =\"background-color: darksalmon\">");
             out.println("<div style=\"text-align: center;\">");
             out.println("<div style=\"display: inline-block; text-align: left;\">");
-            out.println("<form method=\"post\">");
+            out.println("<form method=\"post\" style =\"background-color: darksalmon; text-align: center;font-weight: bold\">");
 
             out.println("Person_Id:<br>");
 
@@ -72,8 +75,8 @@ public class CreateDonationRecord extends HttpServlet {
             out.println("Created:<br>");
             out.printf("<br><input type=\"datetime-local\" step='1' name=\"%s\" value=\"\"><br><br>", DonationRecordLogic.CREATED);
             out.println("<br>");
-            out.println("<input type=\"submit\" name=\"view\" value=\"Add and View\">");
-            out.println("<input type=\"submit\" name=\"add\" value=\"Add\">");
+            out.println("<input type=\"submit\" name=\"view\" value=\"Add and View\" style=\"color: aqua; background: gray\">");
+            out.println("<input type=\"submit\" name=\"add\" value=\"Add\" style=\"color: aqua; background: gray\">");
             out.println("</form>");
 
             if (errorMessage != null && !errorMessage.isEmpty()) {
@@ -133,31 +136,30 @@ public class CreateDonationRecord extends HttpServlet {
         DonationRecordLogic dRLogic = LogicFactory.getFor("DonationRecord");
         // need person logic
         PersonLogic personLogic = LogicFactory.getFor("Person");
+        BloodDonationLogic blDon =LogicFactory.getFor("BloodDonation");
 
         try {
             DonationRecord donationRecord = dRLogic.createEntity(request.getParameterMap());
             //get Person_id the user inputed
 
             String personId = request.getParameter(DonationRecordLogic.PERSON_ID);
+            String bloodId = request.getParameter(DonationRecordLogic.DONATION_ID);
 
             //use the id and person logic to get the entity from database
             Person c = personLogic.getWithId(Integer.parseInt(personId));
-
+            BloodDonation b = blDon.getWithId(Integer.parseInt(bloodId));
             // set person on donationRecord Object
             donationRecord.setPerson(c);
-
+            donationRecord.setBloodDonation(b);
             // create dependancy logic Person and BloodDonation. need to merge for this step
             dRLogic.add(donationRecord);
 
-        } catch (Exception ex) {
+        } catch (ValidationException ex) {
             log("POST",ex);
             errorMessage = ex.getMessage();
         }
 
-        // } else  {
-        //if duplicate print the error message
-        //      errorMessage = "Record_id: \"" + record_id + "\" already exists";
-        // }
+       
         if (request.getParameter("add") != null) {
             //if add button is pressed return the same page
             processRequest(request, response);
@@ -175,6 +177,6 @@ public class CreateDonationRecord extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Donation Record Creattion";
-    }// </editor-fold>
+    }
 
 }

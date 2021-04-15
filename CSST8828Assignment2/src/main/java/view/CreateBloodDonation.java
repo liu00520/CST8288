@@ -1,5 +1,7 @@
 package view;
 
+import common.ValidationException;
+import entity.BloodBank;
 import entity.BloodDonation;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.BloodBankLogic;
 import logic.BloodDonationLogic;
 import logic.LogicFactory;
 
@@ -53,13 +56,14 @@ public class CreateBloodDonation extends HttpServlet {
             out.printf("<input type=\"number\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.MILLILITERS);
             out.println("<br>");
             out.println("Blood Group:<br>");
-            out.printf("<input type=\"number\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.BLOOD_GROUP);
+            out.printf("<input type=\"name\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.BLOOD_GROUP);
             out.println("<br>");
             out.println("RHD:<br>");
-            out.printf("<input type=\"number\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.RHESUS_FACTOR);
+            out.printf("<input type=\"name\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.RHESUS_FACTOR);
             out.println("<br>");
             out.println("Created:<br>");
-            out.printf("<input type=\"number\" name=\"%s\" value=\"\"><br>", BloodDonationLogic.CREATED);
+                       out.printf("<br><input type=\"datetime-local\" step='1' name=\"%s\" value=\"\"><br><br>", BloodDonationLogic.CREATED);
+
             out.println("<br>");
             out.println( "<input type=\"submit\" name=\"view\" value=\"Add and View\">" );
             out.println( "<input type=\"submit\" name=\"add\" value=\"Add\">" );
@@ -127,13 +131,16 @@ public class CreateBloodDonation extends HttpServlet {
             throws ServletException, IOException {
         //log( "POST" );
         //blood donation logic
-        BloodDonationLogic bdLogic = LogicFactory.getFor( "BloodDonation" );
-        
+        BloodDonationLogic bdLogic = LogicFactory.getFor("BloodDonation" );
+         BloodBankLogic blDon =LogicFactory.getFor("BloodBank");
         try {
             BloodDonation bloodDonation = bdLogic.createEntity(request.getParameterMap());
+            String bankId = request.getParameter(BloodDonationLogic.BANK_ID);
+            BloodBank b = blDon.getWithId(Integer.parseInt(bankId));
+            bloodDonation.setBloodBank(b);
             bdLogic.add(bloodDonation);
         }
-        catch (Exception ex) {
+        catch (ValidationException ex) {
             errorMessage = ex.getMessage();
         }
         if( request.getParameter("add") != null ) {

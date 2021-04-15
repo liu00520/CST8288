@@ -1,7 +1,7 @@
 package view;
 
 import entity.BloodBank;
-import entity.DonationRecord;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;

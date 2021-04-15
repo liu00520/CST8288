@@ -38,9 +38,9 @@ public class DonationRecordTable extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>DonationRecordTable</title>");            
+            out.println("<title style=\"color:plum;\">DonationRecordTable</title>");            
             out.println("</head>");
-            out.println("<body>");
+            out.println("<body style=\"background-color: darksalmon; text-align: center;\">");
             
             out.println("<table style=\"margin-left: auto; margin-right: auto;\" border=\"1\">");
             out.println("<caption>Donation Record</caption>");
@@ -116,6 +116,6 @@ public class DonationRecordTable extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Donation Record Creation";
-    }// </editor-fold>
+    }
 
 }
