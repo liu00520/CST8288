@@ -45,7 +45,7 @@ class BloodDonationTest {
     final static void setUpBeforeClass() throws Exception {
         TomcatStartUp.createTomcat( "/SimpleBloodBank", "common.ServletListener", "simplebloodbank-PU-test" );
     }
-//
+
     @AfterAll
     final static void tearDownAfterClass() throws Exception {
         TomcatStartUp.stopAndDestroyTomcat();

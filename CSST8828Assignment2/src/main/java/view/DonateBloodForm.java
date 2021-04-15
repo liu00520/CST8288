@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import logic.BloodBankLogic;
 import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
+import logic.Logic;
 import logic.LogicFactory;
 import logic.PersonLogic;
 
@@ -121,18 +122,26 @@ public class DonateBloodForm extends HttpServlet {
             out.printf("<input type=\"text\" name=\"%s\" value=\"\" >",DonationRecordLogic.ADMINSTRATOR);
             out.println("Date");
             out.printf("<input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\">",DonationRecordLogic.CREATED);
+
             out.println("BloodBank");
-              
-                
-         
-
-
-            out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.BANK_ID);
-            out.println( "<option value=\"1\">BloddyBank</option>" );
-            out.println( "<option value=\"2\">Bank</option>" );
+            Logic<BloodBank> b = LogicFactory.getFor("BloodBank");
+            out.printf("<select type=\"text\" name=\"%s\" value=\"\">",BloodDonationLogic.BANK_ID);
+            b.getAll().forEach(e -> {
+               out.printf("<option value=\"%s\">%s</option>", e.getId(),e.getName());
+            });
            
+      
+          
+ 
             out.println( "</select><br><br>");
+            
+
+        
+              
+              
             out.print("</div>");
+            
+            
             
     
             out.println("<input type=\"submit\" name=\"add\" value=\"Add\">");
@@ -203,7 +212,7 @@ public class DonateBloodForm extends HttpServlet {
           
            BloodDonation blDon = bD.createEntity(request.getParameterMap());
            String bankId = request.getParameter(BloodDonationLogic.BANK_ID);
-           BloodBank b = bln.getWithId(Integer.parseInt(bankId));
+          BloodBank b = bln.getWithId(Integer.parseInt(bankId));
             blDon.setBloodBank(b);
               
           DonationRecord don = donL.createEntity(request.getParameterMap());
