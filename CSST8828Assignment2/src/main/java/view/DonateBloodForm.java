@@ -153,7 +153,6 @@ public class DonateBloodForm extends HttpServlet {
             Person person = personLogic.createEntity(request.getParameterMap());
             personLogic.add(person);
 
-      
         } catch(Exception e) {
 
             message = e.getMessage();

@@ -33,7 +33,7 @@ public class CreateBloodDonation extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        response.setContentType("texr/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /*outputting the page here, using sample code provided*/
             out.println( "<!DOCTYPE html>" );

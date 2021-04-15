@@ -76,8 +76,7 @@ public class PersonTableJSP extends HttpServlet {
         return builder.toString();
     }
     
-    
-        /**
+   /**
      * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
@@ -92,9 +91,9 @@ public class PersonTableJSP extends HttpServlet {
         
         PersonLogic logic = LogicFactory.getFor("Person");
         try{
-        if(request.getParameter("edit") != null) {
-            Person person = logic.updateEntity(request.getParameterMap());
-            logic.update(person);
+            if(request.getParameter("edit") != null) {         
+                Person person = logic.updateEntity(request.getParameterMap());           
+                logic.update(person);
         }
         else if(request.getParameter("delete") != null){
             String[] ids = request.getParameterMap().get("deleteMark");

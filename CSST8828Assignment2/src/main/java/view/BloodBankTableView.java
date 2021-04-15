@@ -18,7 +18,7 @@ import logic.LogicFactory;
  *
  * @author Jia Liu 040992662
  */
-@WebServlet(name = "DonationRecordTable", urlPatterns = {"/DonationRecordTable"})
+@WebServlet(name = "BloodBankTable", urlPatterns = {"/BloodBankTable"})
 public class BloodBankTableView extends HttpServlet {
 
     /**
@@ -45,13 +45,13 @@ public class BloodBankTableView extends HttpServlet {
             out.println("<table style=\"margin-left: auto; margin-right: auto;\" border=\"1\">");
             out.println("<caption>Donation Record</caption>");
             
-            Logic<BloodBank> logic = LogicFactory.getFor("DonationRecord");
+            Logic<BloodBank> logic = LogicFactory.getFor("BloodBank");
             
             out.print("<tr>");
             logic.getColumnNames().forEach(e -> out.printf("<th>%s</th>", e));
             
              out.println( "</tr>" );
-          logic.getAll().forEach(e -> out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><tr>"
+          logic.getAll().forEach(e -> out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><tr>"
                   , logic.extractDataAsList(e).toArray()));
             
             out.println( "<tr>" );
