@@ -64,7 +64,7 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
     public List<BloodBank> getBloodBanksWithEmplyeeCount (int count){
         return get( () -> dal().findByEmplyeeCount( count ) );
     }
-    
+       @Override
     public BloodBank createEntity(Map<String, String[]> parameterMap){
         Objects.requireNonNull( parameterMap, "parameterMap cannot be null" );
         
@@ -95,57 +95,43 @@ public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
         String name = null;
         if( parameterMap.containsKey( NAME ) ){
             name = parameterMap.get( NAME )[ 0 ];
-            validator.accept( name, 45 );
+            validator.accept( name, 100 );
         }
-        String privatelyOwned = parameterMap.get( PRIVATELY_OWNED )[ 0 ];
+
+     
+        String privatelyOwned = parameterMap.get( PRIVATELY_OWNED )[0];
         
         String established= parameterMap.get(ESTABLISHED)[0].replace("T", " ");
         
         Date dateOfEstab = this.convertStringToDate(established);
       
         String employeeCount = parameterMap.get( EMPLOYEE_COUNT )[ 0 ];
-        name = parameterMap.get( NAME )[ 0 ];
-        String id = parameterMap.get( ID )[ 0 ];
-
-        //validate the data
-        validator.accept( name, 45 );
-        validator.accept( privatelyOwned, 5 );
-        validator.accept( established, 45 );
-        validator.accept( employeeCount, 45 );
-        validator.accept( id, 45 );
    
-        //set values on entity
+        //validate the data
+        validator.accept( name, 100 );
+     
         
         entity.setEstablished(dateOfEstab);
-        entity.setName( name );
-        entity.setPrivatelyOwned( Boolean.parseBoolean(privatelyOwned) );
+        entity.setName(name);
+        entity.setPrivatelyOwned(Boolean.parseBoolean(privatelyOwned) );
         entity.setEmplyeeCount(Integer.parseInt(employeeCount));
-        entity.setId(Integer.parseInt(id));
-        
-    
-        try {
-            entity.setEstablished (new SimpleDateFormat("dd/MM/yyyy").parse(established));
-        } catch (ParseException ex) {
-            Logger.getLogger(BloodBankLogic.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+   
         
         return entity;
         
     }
     @Override
     public List<String> getColumnNames() {
-        return Arrays.asList( "BankID", "Name", "Owner ID", "Privately Owned", "Established", "Employee Count" );
+        return Arrays.asList( "BankID", "Owner ID","Name", "Privately Owned", "Established", "Employee Count" );
     }
     
    @Override
     public List<String> getColumnCodes() {
-        return Arrays.asList( ID, NAME, OWNER_ID, PRIVATELY_OWNED, ESTABLISHED, EMPLOYEE_COUNT );
+        return Arrays.asList( ID, OWNER_ID, NAME, PRIVATELY_OWNED, ESTABLISHED, EMPLOYEE_COUNT );
     }
     @Override
     public List<?> extractDataAsList( BloodBank e ) {
-        return Arrays.asList( e.getId(), e.getName(), e.getPrivatelyOwned(), e.getEstablished(), e.getEmplyeeCount() );
+        return Arrays.asList( e.getId(), e.getOwner(),e.getName(), e.getPrivatelyOwned(), e.getEstablished(), e.getEmplyeeCount() );
     }
  
     

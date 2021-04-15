@@ -1,6 +1,7 @@
 package view;
 
 import entity.BloodBank;
+import entity.Person;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import logic.BloodBankLogic;
 import logic.LogicFactory;
+import logic.PersonLogic;
 
 
 /**
@@ -46,16 +48,18 @@ public class CreateBloodBank extends HttpServlet {
             out.println( "<div style=\"display: inline-block; text-align: left;\">" );
             out.println( "<form method=\"post\">" );
             
-            out.println("BankID:");
-            out.printf("<br><input type=\"text\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.ID );
+            out.println("OwnerID:");
+            out.printf("<br><input type=\"number\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.OWNER_ID );
             out.println("BankName:");
             out.printf("<br><input type=\"text\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.NAME );
             out.println("PrivatelyOwned?");
             out.printf("<br><input type=\"text\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.PRIVATELY_OWNED );
-            out.println("EmployeeCount:");
-            out.printf("<br><input type=\"text\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.EMPLOYEE_COUNT );
+            
             out.println("Established:");
             out.printf("<br><input type=\"datetime-local\" step=\"1\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.ESTABLISHED );
+            out.println("EmployeeCount:");
+            out.printf("<br><input type=\"number\" name=\"%s\" value=\"\"><br><br>", BloodBankLogic.EMPLOYEE_COUNT );
+           
             out.println( "<input type=\"submit\" name=\"view\" value=\"Add and View\">" );
             out.println( "<input type=\"submit\" name=\"add\" value=\"Add\">" );
             out.println( "</form>" );
@@ -109,10 +113,16 @@ public class CreateBloodBank extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        BloodBankLogic bloodBankLogic = LogicFactory.getFor("Person");
+        BloodBankLogic bloodBankLogic = LogicFactory.getFor("BloodBank");
+        PersonLogic personLogic =LogicFactory.getFor("Person");
         try{
             BloodBank bloodBank = bloodBankLogic.createEntity(request.getParameterMap());
-            bloodBankLogic.add(bloodBank);
+            
+            String personId = request.getParameter(BloodBankLogic.OWNER_ID);
+            Person c = personLogic.getWithId(Integer.parseInt(personId));
+             
+             bloodBank.setOwner(c);
+             bloodBankLogic.add(bloodBank);
         } catch(Exception e){
             errorMessage = e.getMessage();
         }

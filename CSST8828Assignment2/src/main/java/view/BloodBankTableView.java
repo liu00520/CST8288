@@ -38,12 +38,12 @@ public class BloodBankTableView extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>DonationRecordTable</title>");            
+            out.println("<title>BloodBank Table</title>");            
             out.println("</head>");
             out.println("<body>");
             
             out.println("<table style=\"margin-left: auto; margin-right: auto;\" border=\"1\">");
-            out.println("<caption>Donation Record</caption>");
+            out.println("<caption>BloodBank</caption>");
             
             Logic<BloodBank> logic = LogicFactory.getFor("BloodBank");
             
