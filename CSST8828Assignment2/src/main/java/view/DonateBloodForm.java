@@ -197,6 +197,7 @@ public class DonateBloodForm extends HttpServlet {
         BloodBankLogic bln=LogicFactory.getFor("BloodBank");
      
         try {
+
          
           Person person = personLogic.createEntity(request.getParameterMap());
           
@@ -217,6 +218,9 @@ public class DonateBloodForm extends HttpServlet {
          
     
         } catch(ValidationException e) {
+
+          message = e.getMessage();
+        } catch(Exception e) {
 
             message = e.getMessage();
         }

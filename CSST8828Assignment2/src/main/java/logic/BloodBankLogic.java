@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Jia Liu 040992662
  */
+
 public class BloodBankLogic extends GenericLogic<BloodBank, BloodBankDAL> {
     
     //static string to avoid typos

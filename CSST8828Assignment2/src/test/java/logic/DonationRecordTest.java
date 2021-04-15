@@ -25,14 +25,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author sarah
  */
-@Disabled
+
+//@Disabled
+
 class DonationRecordTest {
 
     private DonationRecordLogic logic;
@@ -230,13 +232,20 @@ class DonationRecordTest {
         
         DonationRecord returnedRecord = logic.createEntity(sampleMap);
         //call the person logic, get the person with specific id then add it to record
+
          //add the depedencies
          Person c =personLogic.getWithId(2);
          BloodDonation b =bloodLogic.getWithId(1);
          returnedRecord.setPerson(c);
          returnedRecord.setBloodDonation(b);
        
-      
+
+  
+   
+
+
+    
+
 
         logic.add(returnedRecord);
 

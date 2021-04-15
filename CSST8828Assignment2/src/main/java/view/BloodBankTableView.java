@@ -51,7 +51,7 @@ public class BloodBankTableView extends HttpServlet {
             logic.getColumnNames().forEach(e -> out.printf("<th>%s</th>", e));
             
              out.println( "</tr>" );
-          logic.getAll().forEach(e -> out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><tr>"
+          logic.getAll().forEach(e -> out.printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><tr>"
                   , logic.extractDataAsList(e).toArray()));
             
             out.println( "<tr>" );
