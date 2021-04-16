@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import logic.BloodBankLogic;
 import logic.BloodDonationLogic;
 import logic.DonationRecordLogic;
+import logic.Logic;
 import logic.LogicFactory;
 import logic.PersonLogic;
 
@@ -90,7 +91,7 @@ public class DonateBloodForm extends HttpServlet {
             out.println( "<option value=\"A\">A</option>" );
             out.println( "<option value=\"AB\">AB</option>" );
             out.println( "<option value=\"B\">B</option>" );
-            out.println( "</select><br><br>");
+            out.println( "</select>");
        
             out.println("Amount");
             out.printf("<input type=\"number\" name=\"%s\" value=\"\">", BloodDonationLogic.MILLILITERS);
@@ -101,14 +102,14 @@ public class DonateBloodForm extends HttpServlet {
             out.println( "<option value=\"true\">True</option>" );
             out.println( "<option value=\"false\">False</option>" );
            
-            out.println( "</select><br><br>");
+            out.println( "</select>");
        
             out.println("RHD");
             out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.RHESUS_FACTOR);
             out.println( "<option value=\"-\">Negative</option>" );
             out.println( "<option value=\"+\">Positive</option>" );
            
-            out.println( "</select><br><br>");
+            out.println( "</select>");
        
             out.println("</div>");
            
@@ -124,13 +125,10 @@ public class DonateBloodForm extends HttpServlet {
             out.println("BloodBank");
               
                 
-         
-
-
+            Logic<BloodBank> b = LogicFactory.getFor("BloodBank");
             out.printf("<select type=\"text\" name=\"%s\" value=\"\">", BloodDonationLogic.BANK_ID);
-            out.println( "<option value=\"1\">BloddyBank</option>" );
-            out.println( "<option value=\"2\">Bank</option>" );
-           
+            b.getAll().forEach(e -> out.printf("<option value=\"%s\">%s</option>", e.getId(), e.getName()));
+ 
             out.println( "</select><br><br>");
             out.print("</div>");
             

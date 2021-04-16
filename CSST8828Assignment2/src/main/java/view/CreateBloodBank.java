@@ -109,7 +109,7 @@ public class CreateBloodBank extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        BloodBankLogic bloodBankLogic = LogicFactory.getFor("Person");
+        BloodBankLogic bloodBankLogic = LogicFactory.getFor("BloodBank");
         try{
             BloodBank bloodBank = bloodBankLogic.createEntity(request.getParameterMap());
             bloodBankLogic.add(bloodBank);
